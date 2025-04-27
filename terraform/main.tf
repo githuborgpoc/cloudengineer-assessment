@@ -239,6 +239,7 @@ resource "aws_iam_policy" "ecs_task_policy" {
           "elasticloadbalancing:Describe*",
           "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
           "elasticloadbalancing:RegisterTargets",
+          "cloudwatch:*"
         ],
         Resource = "*"
       }
