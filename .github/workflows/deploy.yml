@@ -6,7 +6,6 @@ on:
       image_tag:
         description: 'Tag for the Docker image to deploy'
         required: true
-        default: ${{ github.sha }}  # Reference github.sha here
 
 env:
   AWS_REGION: "us-east-1"
