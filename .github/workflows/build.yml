@@ -9,7 +9,7 @@ env:
   AWS_REGION: "us-east-1"  # AWS region where ECR repository is located
   IMAGE_TAG: ${{ github.sha }}  # Use the commit hash as the image tag
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}  # AWS Account ID (stored in GitHub Secrets)
- 
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
       with:
         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        region: ${{ env.AWS_REGION }}
+        region: ${{ vars.AWS_REGION }}
 
     - name: Log in to Amazon ECR
       run: |
