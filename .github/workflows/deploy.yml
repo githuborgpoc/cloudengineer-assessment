@@ -1,0 +1,60 @@
+name: Deploy to ECS
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Tag for the Docker image to deploy'
+        required: true
+        default: '${{ github.sha }}'
+
+env:
+  AWS_REGION: "us-east-1"
+  IMAGE_TAG: ${{ github.event.inputs.image_tag || github.sha }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  ECS_CLUSTER_NAME: "your-ecs-cluster-name"
+  ECS_SERVICE_NAME: "your-ecs-service-name"
+  ECS_TASK_DEFINITION: "your-task-definition-name"  # The name of your ECS Task Definition
+  ECR_REPO_WEBAPP: "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/webapp"
+  ECR_REPO_REDIS: "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/redis"
+  ECR_REPO_NGINX: "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/nginx"
+  ECR_REPO_MYSQL: "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/db"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up AWS CLI
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Use secret for AWS Access Key ID
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Use secret for AWS Secret Access Key
+        aws-region: ${{ env.AWS_REGION }}  # Specify the AWS region correctly
+
+    - name: Fetch current ECS task definition
+      run: |
+        TASK_DEF_JSON=$(aws ecs describe-task-definitions --task-definition $ECS_TASK_DEFINITION --query 'taskDefinition[0]' --output json)
+        echo "TASK_DEF_JSON=$TASK_DEF_JSON" >> $GITHUB_ENV
+
+    - name: Update ECS task definition with new images
+      run: |
+        NEW_TASK_DEF=$(echo "$TASK_DEF_JSON" | jq '.containerDefinitions[0].image = "${{ env.ECR_REPO_WEBAPP }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[1].image = "${{ env.ECR_REPO_REDIS }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[2].image = "${{ env.ECR_REPO_NGINX }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[3].image = "${{ env.ECR_REPO_MYSQL }}:${{ env.IMAGE_TAG }}"')
+        echo "NEW_TASK_DEF=$NEW_TASK_DEF" >> $GITHUB_ENV
+
+    - name: Register new ECS task definition
+      run: |
+        echo "$NEW_TASK_DEF" | jq '.' > task_definition.json
+        NEW_TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://task_definition.json --query 'taskDefinition.taskDefinitionArn' --output text)
+        echo "NEW_TASK_DEF_ARN=$NEW_TASK_DEF_ARN" >> $GITHUB_ENV
+
+    - name: Update ECS service with new task definition
+      run: |
+        aws ecs update-service --cluster $ECS_CLUSTER_NAME --service $ECS_SERVICE_NAME --task-definition $NEW_TASK_DEF_ARN
+
+    - name: Output deployment information
+      run: |
+        echo "Deployment completed to ECS with task definition: $NEW_TASK_DEF_ARN"
