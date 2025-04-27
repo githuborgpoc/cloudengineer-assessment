@@ -37,20 +37,20 @@ jobs:
     - name: Fetch current ECS task definition
       run: |
         TASK_DEF_JSON=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --query 'taskDefinition[0]' --output json)
-        echo "TASK_DEF_JSON=$TASK_DEF_JSON" >> $GITHUB_ENV
-        cat  $GITHUB_ENV
+        echo "TASK_DEF_JSON=$TASK_DEF_JSON" >> td.json
+        cat  td.json
 
     - name: Update ECS task definition with new images
       run: |
-        cat  $GITHUB_ENV
+        cat  td.json
         NEW_TASK_DEF=$(echo "$TASK_DEF_JSON" | jq '.containerDefinitions[0].image = "${{ env.ECR_REPO_WEBAPP }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[1].image = "${{ env.ECR_REPO_REDIS }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[2].image = "${{ env.ECR_REPO_NGINX }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[3].image = "${{ env.ECR_REPO_MYSQL }}:${{ env.IMAGE_TAG }}"')
-        echo "NEW_TASK_DEF=$NEW_TASK_DEF" >> $GITHUB_ENV
+        echo "NEW_TASK_DEF=$NEW_TASK_DEF" >> td.json
 
     - name: Register new ECS task definition
       run: |
         echo "$NEW_TASK_DEF" | jq '.' > task_definition.json
         NEW_TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://task_definition.json --query 'taskDefinition.taskDefinitionArn' --output text)
-        echo "NEW_TASK_DEF_ARN=$NEW_TASK_DEF_ARN" >> $GITHUB_ENV
+        echo "NEW_TASK_DEF_ARN=$NEW_TASK_DEF_ARN" >> td.json
 
     - name: Update ECS service with new task definition
       run: |
