@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  webapp:
+    image: node
+    container_name: linksweb
+    build: .
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_HOST=db
+      - DATABASE_USER=fazt
+      - DATABASE_PASSWORD=mypassword
+      - DATABASE_NAME=linksdb
+      - REDIS_HOST=redis
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    command: bash -c "npm install && npm run dev"
+
+  db:
+    image: mysql:8.0
+    container_name: linksdb
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=linksdb
+      - MYSQL_USER=fazt
+      - MYSQL_PASSWORD=mypassword
+      - MYSQL_ROOT_PASSWORD=mypassword
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./database/db.sql:/docker-entrypoint-initdb.d/db.sql
+
+  redis:
+    image: redis/redis-stack
+    container_name: redis
+    ports:
+      - "6379:6379"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/webapp.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - webapp
