@@ -6,7 +6,6 @@ on:
       image_tag:
         description: 'Tag for the Docker image'
         required: true
-        default: '${{ github.sha }}'
   push:
     branches:
       - main
