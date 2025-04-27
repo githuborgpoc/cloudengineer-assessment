@@ -42,3 +42,8 @@ variable "project_name" {
   description = "Name of the project"
   default     = "LinksApp"
 }
+
+variable "repository_names" {
+  type    = list(string)
+  default = ["webapp", "db", "redis", "nginx"]
+}

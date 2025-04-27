@@ -252,8 +252,9 @@ resource "aws_iam_policy_attachment" "ecs_task_policy_attachment" {
   roles      = [aws_iam_role.ecs_task_role.name]
 }
 
-resource "aws_ecr_repository" "webapp_repo" {
-  name                 = "webapp"
+resource "aws_ecr_repository" "repos" {
+  for_each            = toset(var.repository_names)
+  name                = each.value
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -265,6 +266,6 @@ resource "aws_ecr_repository" "webapp_repo" {
   }
 
   tags = {
-    Name = "webapp"
+    Name = each.value
   }
 }
