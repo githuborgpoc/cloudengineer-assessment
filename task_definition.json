@@ -4,8 +4,8 @@
         {
             "name": "db",
             "image": "mysql:8.0",
-            "cpu": 64,
-            "memory": 128,
+            "cpu": 1024,
+            "memory": 2048,
             "portMappings": [
                 {
                     "containerPort": 3306,
@@ -57,8 +57,8 @@
         {
             "name": "nginx",
             "image": "nginx:latest",
-            "cpu": 64,
-            "memory": 128,
+            "cpu": 1024,
+            "memory": 2048,
             "portMappings": [
                 {
                     "containerPort": 80,
@@ -93,8 +93,8 @@
         {
             "name": "redis",
             "image": "redis/redis-stack",
-            "cpu": 64,
-            "memory": 128,
+            "cpu": 1024,
+            "memory": 2048,
             "portMappings": [
                 {
                     "containerPort": 6379,
@@ -129,8 +129,8 @@
         {
             "name": "webapp",
             "image": "node:latest",
-            "cpu": 64,
-            "memory": 128,
+            "cpu": 1024,
+            "memory": 2048,
             "portMappings": [
                 {
                     "name": "webapp",
@@ -207,8 +207,8 @@
     "requiresCompatibilities": [
         "FARGATE"
     ],
-    "cpu": "256",
-    "memory": "512",
+    "cpu": "4096",
+    "memory": "8192",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"

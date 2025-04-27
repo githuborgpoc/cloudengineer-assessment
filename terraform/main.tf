@@ -124,13 +124,13 @@ module "ecs" {
 
   services = {
     linksweb-service = {
-      cpu    = 256
-      memory = 512
+      cpu    = 4096
+      memory = 8192
 
       container_definitions = {
         webapp = {
-          cpu    = 64
-          memory = 128
+          cpu    = 1024
+          memory = 2048
           image  = var.webapp_image
           essential = true
           port_mappings = [
@@ -151,8 +151,8 @@ module "ecs" {
         }
 
         db = {
-          cpu    = 64
-          memory = 128
+          cpu    = 1024
+          memory = 2048
           image  = "mysql:8.0"
           essential = true
           port_mappings = [
@@ -170,8 +170,8 @@ module "ecs" {
         }
 
         redis = {
-          cpu    = 64
-          memory = 128
+          cpu    = 1024
+          memory = 2048
           image  = "redis/redis-stack"
           essential = true
           port_mappings = [
@@ -183,8 +183,8 @@ module "ecs" {
         }
 
         nginx = {
-          cpu    = 64
-          memory = 128
+          cpu    = 1024
+          memory = 2048
           image  = "nginx:latest"
           essential = true
           port_mappings = [
