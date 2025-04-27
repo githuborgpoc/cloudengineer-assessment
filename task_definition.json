@@ -1,0 +1,244 @@
+{
+    "taskDefinition": {
+        "taskDefinitionArn": "arn:aws:ecs:us-east-1:429121668835:task-definition/linksweb-service:2",
+        "containerDefinitions": [
+            {
+                "name": "db",
+                "image": "mysql:8.0",
+                "cpu": 64,
+                "memory": 128,
+                "portMappings": [
+                    {
+                        "containerPort": 3306,
+                        "hostPort": 3306,
+                        "protocol": "tcp"
+                    }
+                ],
+                "essential": true,
+                "environment": [
+                    {
+                        "name": "MYSQL_DATABASE",
+                        "value": "linksdb"
+                    },
+                    {
+                        "name": "MYSQL_PASSWORD",
+                        "value": "mypassword"
+                    },
+                    {
+                        "name": "MYSQL_USER",
+                        "value": "fazt"
+                    },
+                    {
+                        "name": "MYSQL_ROOT_PASSWORD",
+                        "value": "mypassword"
+                    }
+                ],
+                "mountPoints": [],
+                "volumesFrom": [],
+                "linuxParameters": {
+                    "initProcessEnabled": false
+                },
+                "startTimeout": 30,
+                "stopTimeout": 120,
+                "user": "0",
+                "privileged": false,
+                "readonlyRootFilesystem": true,
+                "interactive": false,
+                "pseudoTerminal": false,
+                "logConfiguration": {
+                    "logDriver": "awslogs",
+                    "options": {
+                        "awslogs-group": "/aws/ecs/linksweb-service/db",
+                        "awslogs-region": "us-east-1",
+                        "awslogs-stream-prefix": "ecs"
+                    }
+                },
+                "systemControls": []
+            },
+            {
+                "name": "nginx",
+                "image": "nginx:latest",
+                "cpu": 64,
+                "memory": 128,
+                "portMappings": [
+                    {
+                        "containerPort": 80,
+                        "hostPort": 80,
+                        "protocol": "tcp"
+                    }
+                ],
+                "essential": true,
+                "environment": [],
+                "mountPoints": [],
+                "volumesFrom": [],
+                "linuxParameters": {
+                    "initProcessEnabled": false
+                },
+                "startTimeout": 30,
+                "stopTimeout": 120,
+                "user": "0",
+                "privileged": false,
+                "readonlyRootFilesystem": true,
+                "interactive": false,
+                "pseudoTerminal": false,
+                "logConfiguration": {
+                    "logDriver": "awslogs",
+                    "options": {
+                        "awslogs-group": "/aws/ecs/linksweb-service/nginx",
+                        "awslogs-region": "us-east-1",
+                        "awslogs-stream-prefix": "ecs"
+                    }
+                },
+                "systemControls": []
+            },
+            {
+                "name": "redis",
+                "image": "redis/redis-stack",
+                "cpu": 64,
+                "memory": 128,
+                "portMappings": [
+                    {
+                        "containerPort": 6379,
+                        "hostPort": 6379,
+                        "protocol": "tcp"
+                    }
+                ],
+                "essential": true,
+                "environment": [],
+                "mountPoints": [],
+                "volumesFrom": [],
+                "linuxParameters": {
+                    "initProcessEnabled": false
+                },
+                "startTimeout": 30,
+                "stopTimeout": 120,
+                "user": "0",
+                "privileged": false,
+                "readonlyRootFilesystem": true,
+                "interactive": false,
+                "pseudoTerminal": false,
+                "logConfiguration": {
+                    "logDriver": "awslogs",
+                    "options": {
+                        "awslogs-group": "/aws/ecs/linksweb-service/redis",
+                        "awslogs-region": "us-east-1",
+                        "awslogs-stream-prefix": "ecs"
+                    }
+                },
+                "systemControls": []
+            },
+            {
+                "name": "webapp",
+                "image": "node:latest",
+                "cpu": 64,
+                "memory": 128,
+                "portMappings": [
+                    {
+                        "containerPort": 4000,
+                        "hostPort": 4000,
+                        "protocol": "tcp",
+                        "name": "webapp"
+                    }
+                ],
+                "essential": true,
+                "environment": [
+                    {
+                        "name": "REDIS_HOST",
+                        "value": "redis"
+                    },
+                    {
+                        "name": "NODE_ENV",
+                        "value": "development"
+                    },
+                    {
+                        "name": "DATABASE_NAME",
+                        "value": "linksdb"
+                    },
+                    {
+                        "name": "DATABASE_HOST",
+                        "value": "db"
+                    },
+                    {
+                        "name": "DATABASE_USER",
+                        "value": "fazt"
+                    },
+                    {
+                        "name": "DATABASE_PASSWORD",
+                        "value": "mypassword"
+                    }
+                ],
+                "mountPoints": [],
+                "volumesFrom": [],
+                "linuxParameters": {
+                    "initProcessEnabled": false
+                },
+                "startTimeout": 30,
+                "stopTimeout": 120,
+                "user": "0",
+                "privileged": false,
+                "readonlyRootFilesystem": true,
+                "interactive": false,
+                "pseudoTerminal": false,
+                "logConfiguration": {
+                    "logDriver": "awslogs",
+                    "options": {
+                        "awslogs-group": "/aws/ecs/linksweb-service/webapp",
+                        "awslogs-region": "us-east-1",
+                        "awslogs-stream-prefix": "ecs"
+                    }
+                },
+                "systemControls": []
+            }
+        ],
+        "family": "linksweb-service",
+        "taskRoleArn": "arn:aws:iam::429121668835:role/linksweb-service-20250427104013748900000004",
+        "executionRoleArn": "arn:aws:iam::429121668835:role/linksweb-service-20250427104013742000000003",
+        "networkMode": "awsvpc",
+        "revision": 2,
+        "volumes": [],
+        "status": "ACTIVE",
+        "requiresAttributes": [
+            {
+                "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+            },
+            {
+                "name": "ecs.capability.execution-role-awslogs"
+            },
+            {
+                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+            },
+            {
+                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.17"
+            },
+            {
+                "name": "com.amazonaws.ecs.capability.task-iam-role"
+            },
+            {
+                "name": "ecs.capability.container-ordering"
+            },
+            {
+                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+            },
+            {
+                "name": "ecs.capability.task-eni"
+            }
+        ],
+        "placementConstraints": [],
+        "compatibilities": [
+            "EC2",
+            "FARGATE"
+        ],
+        "runtimePlatform": {
+            "cpuArchitecture": "X86_64",
+            "operatingSystemFamily": "LINUX"
+        },
+        "requiresCompatibilities": [
+            "FARGATE"
+        ],
+        "cpu": "256",
+        "memory": "512",
+        "registeredAt": "2025-04-27T19:19:54.341000+05:30",
+        "registeredBy": "arn:aws:iam::429121668835:user/automation"
+    },
+    "tags": []
+}

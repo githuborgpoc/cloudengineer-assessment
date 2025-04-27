@@ -36,7 +36,8 @@ jobs:
 
     - name: Fetch current ECS task definition
       run: |
-        aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --output json > task_definition.json
+        taskDefinition=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --output json)
+        echo $taskDefinition | jq '.taskDefinition' > task_definition.json
 
     - name: Update ECS task definition with new images
       run: |
