@@ -11,7 +11,7 @@ ENV MYSQL_ROOT_PASSWORD=mypassword
 CMD ["--default-authentication-plugin=mysql_native_password", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
 
 # Copy the SQL initialization script into the container
-COPY ./database/db.sql /docker-entrypoint-initdb.d/db.sql
+COPY db.sql /docker-entrypoint-initdb.d/db.sql
 
 # Expose MySQL's default port
 EXPOSE 3306
