@@ -38,7 +38,7 @@ jobs:
       run: |
         TASK_DEF_JSON=$(cat task_definition.json)
         echo "$TASK_DEF_JSON" | jq '.containerDefinitions[0].image = ""${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/webapp":${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[1].image = "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/redis:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[2].image = "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/nginx:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[3].image = "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/db:${{ env.IMAGE_TAG }}"' > task_definition.json
-        
+        cat task_definition.json
 
     - name: Register new ECS task definition
       run: |
