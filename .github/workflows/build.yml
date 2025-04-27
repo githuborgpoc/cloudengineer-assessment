@@ -1,14 +1,20 @@
 name: Build and Push Docker Containers to ECR
 
 on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Tag for the Docker image'
+        required: true
+        default: '${{ github.sha }}'
   push:
     branches:
-      - main  # Trigger this pipeline on push to the main branch
+      - main
 
 env:
-  AWS_REGION: "us-east-1"  # AWS region where ECR repository is located
-  IMAGE_TAG: ${{ github.sha }}  # Use the commit hash as the image tag
-  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}  # AWS Account ID (stored in GitHub Secrets)
+  AWS_REGION: "us-east-1"
+  IMAGE_TAG: ${{ github.event.inputs.image_tag || github.sha }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
 jobs:
   build:
