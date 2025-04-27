@@ -41,6 +41,7 @@ jobs:
 
     - name: Register new ECS task definition
       run: |
+        cat task_definition.json
         aws ecs register-task-definition --cli-input-json file://task_definition.json
 
     # - name: Update ECS service with new task definition
