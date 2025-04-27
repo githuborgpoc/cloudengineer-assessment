@@ -37,8 +37,21 @@ jobs:
     - name: Update ECS task definition with new images
       run: |
         TASK_DEF_JSON=$(cat task_definition.json)
-        echo "$TASK_DEF_JSON" | jq '.containerDefinitions[0].image = ""${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/webapp":${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[1].image = "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/redis:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[2].image = "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/nginx:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[3].image = "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/db:${{ env.IMAGE_TAG }}"' > task_definition.json
+
+        echo "$TASK_DEF_JSON" | jq \
+          --arg webapp_image "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/webapp:$IMAGE_TAG" \
+          --arg redis_image "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/redis:$IMAGE_TAG" \
+          --arg nginx_image "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/nginx:$IMAGE_TAG" \
+          --arg db_image "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/db:$IMAGE_TAG" \
+          '
+          .containerDefinitions[0].image = $webapp_image |
+          .containerDefinitions[1].image = $redis_image |
+          .containerDefinitions[2].image = $nginx_image |
+          .containerDefinitions[3].image = $db_image
+          ' > task_definition.json
+
         cat task_definition.json
+
 
     - name: Register new ECS task definition
       run: |
