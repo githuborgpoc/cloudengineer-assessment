@@ -7,9 +7,6 @@ WORKDIR /app
 # Copy package.json and package-lock.json (if exists)
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
-
 # Copy the rest of the application
 COPY . .
 
@@ -25,4 +22,5 @@ ENV DATABASE_NAME=linksdb
 ENV REDIS_HOST=redis
 
 # Run the app
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "npm install && npm run dev"]
+
