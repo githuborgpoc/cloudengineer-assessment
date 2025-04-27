@@ -36,20 +36,18 @@ jobs:
 
     - name: Fetch current ECS task definition
       run: |
-        TASK_DEF_JSON=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --output json)
-        echo "TASK_DEF_JSON=$TASK_DEF_JSON" >> td.json
-        cat  td.json
+        aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --output json > task_definition.json
 
     - name: Update ECS task definition with new images
       run: |
-        NEW_TASK_DEF=$(echo "$TASK_DEF_JSON" | jq '.containerDefinitions[0].image = "${{ env.ECR_REPO_WEBAPP }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[1].image = "${{ env.ECR_REPO_REDIS }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[2].image = "${{ env.ECR_REPO_NGINX }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[3].image = "${{ env.ECR_REPO_MYSQL }}:${{ env.IMAGE_TAG }}"')
-        echo $NEW_TASK_DEF  > task_definition.json
+        TASK_DEF_JSON=$(cat task_definition.json)
+        echo "$TASK_DEF_JSON" | jq '.containerDefinitions[0].image = "${{ env.ECR_REPO_WEBAPP }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[1].image = "${{ env.ECR_REPO_REDIS }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[2].image = "${{ env.ECR_REPO_NGINX }}:${{ env.IMAGE_TAG }}"' | jq '.containerDefinitions[3].image = "${{ env.ECR_REPO_MYSQL }}:${{ env.IMAGE_TAG }}"' > task_definition.json
         cat  task_definition.json
 
     - name: Register new ECS task definition
       run: |
-        NEW_TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://task_definition.json --query 'taskDefinition.taskDefinitionArn' --output text)
-        echo "NEW_TASK_DEF_ARN=$NEW_TASK_DEF_ARN" >> td.json
+        cat  task_definition.json
+        aws ecs register-task-definition --cli-input-json file://task_definition.json --query 'taskDefinition.taskDefinitionArn' --output text
 
     - name: Update ECS service with new task definition
       run: |
