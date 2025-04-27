@@ -34,11 +34,6 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: Fetch current ECS task definition
-      run: |
-        taskDefinition=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --output json)
-        echo $taskDefinition | jq '.taskDefinition' > task_definition.json
-
     - name: Update ECS task definition with new images
       run: |
         TASK_DEF_JSON=$(cat task_definition.json)
