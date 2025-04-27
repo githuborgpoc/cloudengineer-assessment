@@ -1,6 +1,7 @@
 name: Build and Push to Amazon ECR
 
 on:
+  workflow_dispatch:
   push:
     branches: 
       - main       # ✅ Run on push to the main branch
