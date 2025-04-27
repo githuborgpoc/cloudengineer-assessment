@@ -61,13 +61,13 @@ jobs:
         # Build the mysql image from the Dockerfile in the database directory
         docker build -t mysql:$IMAGE_TAG -f database/Dockerfile database/
         # Tag the image for ECR
-        docker tag mysql:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/mysql:$IMAGE_TAG
+        docker tag mysql:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/db:$IMAGE_TAG
         # Push the image to ECR
-        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/mysql:$IMAGE_TAG
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/db:$IMAGE_TAG
 
     - name: Output ECR Image URIs
       run: |
         echo "Webapp Image URI: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/webapp:$IMAGE_TAG"
         echo "Redis Image URI: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/redis:$IMAGE_TAG"
         echo "Nginx Image URI: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/nginx:$IMAGE_TAG"
-        echo "MySQL Image URI: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/mysql:$IMAGE_TAG"
+        echo "MySQL Image URI: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/db:$IMAGE_TAG"
