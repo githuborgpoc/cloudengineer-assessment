@@ -58,9 +58,20 @@ jobs:
         cat task_definition.json
         aws ecs register-task-definition --cli-input-json file://task_definition.json
 
-    # - name: Update ECS service with new task definition
-    #   run: |
-    #     aws ecs update-service --cluster $ECS_CLUSTER_NAME --service $ECS_SERVICE_NAME --task-definition $NEW_TASK_DEF_ARN
+    - name: Update ECS service with new task definition
+      run: |
+        NEW_TASK_DEF_ARN=$(aws ecs register-task-definition \
+          --cli-input-json file://task_definition.json \
+          --query 'taskDefinition.taskDefinitionArn' \
+          --output text)
+
+        echo "Using new task definition ARN: $NEW_TASK_DEF_ARN"
+
+        aws ecs update-service \
+          --cluster $ECS_CLUSTER_NAME \
+          --service $ECS_SERVICE_NAME \
+          --task-definition $NEW_TASK_DEF_ARN
+
 
     - name: Output deployment information
       run: |
