@@ -36,7 +36,7 @@ jobs:
 
     - name: Fetch current ECS task definition
       run: |
-        TASK_DEF_JSON=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --query 'taskDefinition[0]' --output json)
+        TASK_DEF_JSON=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --output json)
         echo "TASK_DEF_JSON=$TASK_DEF_JSON" >> td.json
         cat  td.json
 
