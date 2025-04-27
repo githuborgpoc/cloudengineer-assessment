@@ -1,0 +1,55 @@
+name: Build and Push to Amazon ECR
+
+on:
+  push:
+    branches: 
+      - main       # ✅ Run on push to the main branch
+    tags: 
+      - 'v*'       # ✅ Run on tag push, e.g., v1.0.0
+
+env:
+  AWS_REGION: us-east-1           # ✅ Your AWS region
+  ECR_REPOSITORY: webapp         # ✅ Your ECR repository name
+  IMAGE_TAG: ${{ github.sha }}   # ✅ Commit SHA as tag by default
+  IMAGE_TAG_ON_PUSH: ${{ github.ref_name }}  # For versioned tags (e.g., v1.0.0)
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials (with secrets)
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: ecr-login
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build Docker image
+      run: |
+        docker build -t $ECR_REPOSITORY:${{ env.IMAGE_TAG }} .
+
+    - name: Tag Docker image for ECR
+      run: |
+        docker tag $ECR_REPOSITORY:${{ env.IMAGE_TAG }} ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+        if [ "${GITHUB_REF_TYPE}" == "tag" ]; then
+          docker tag $ECR_REPOSITORY:${{ env.IMAGE_TAG }} ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG_ON_PUSH }}
+        fi
+
+    - name: Push Docker image to ECR
+      run: |
+        docker push ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+        if [ "${GITHUB_REF_TYPE}" == "tag" ]; then
+          docker push ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG_ON_PUSH }}
+        fi
