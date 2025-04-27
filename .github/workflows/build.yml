@@ -21,9 +21,9 @@ jobs:
     - name: Set up AWS CLI
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Use secret for AWS Access Key ID
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Use secret for AWS Secret Access Key
+        aws-region: ${{ env.AWS_REGION }}  # Specify the AWS region correctly
 
     - name: Log in to Amazon ECR
       run: |
