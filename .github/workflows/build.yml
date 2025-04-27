@@ -21,37 +21,53 @@ jobs:
     - name: Set up AWS CLI
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Use secret for AWS Access Key ID
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Use secret for AWS Secret Access Key
-        aws-region: ${{ env.AWS_REGION }}  # Specify the AWS region correctly
-
-    - name: Install Docker Compose
-      run: |
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-        docker-compose --version
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        region: ${{ env.AWS_REGION }}
 
     - name: Log in to Amazon ECR
       run: |
         aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
-    - name: Build Docker images with docker-compose
+    - name: Build and Push webapp image
       run: |
-        docker-compose build
-        docker images
+        # Build the webapp image from the Dockerfile
+        docker build -t webapp:$IMAGE_TAG -f Dockerfile .
+        # Tag the image for ECR
+        docker tag webapp:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/webapp:$IMAGE_TAG
+        # Push the image to ECR
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/webapp:$IMAGE_TAG
 
-    - name: Push Docker images to ECR
+    - name: Build and Push redis image
       run: |
-        # Loop through each service in the docker-compose.yml and push to ECR
-        for service in $(docker-compose config --services); do
-          # Tag the Docker image with the ECR repository URL
-          docker tag $service:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$service:$IMAGE_TAG
-          # Push the image to ECR
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$service:$IMAGE_TAG
-        done
+        # Build the redis image from the Dockerfile in the redis directory
+        docker build -t redis:$IMAGE_TAG -f redis/Dockerfile redis/
+        # Tag the image for ECR
+        docker tag redis:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/redis:$IMAGE_TAG
+        # Push the image to ECR
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/redis:$IMAGE_TAG
+
+    - name: Build and Push nginx image
+      run: |
+        # Build the nginx image from the Dockerfile in the nginx directory
+        docker build -t nginx:$IMAGE_TAG -f nginx/Dockerfile nginx/
+        # Tag the image for ECR
+        docker tag nginx:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/nginx:$IMAGE_TAG
+        # Push the image to ECR
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/nginx:$IMAGE_TAG
+
+    - name: Build and Push mysql image
+      run: |
+        # Build the mysql image from the Dockerfile in the database directory
+        docker build -t mysql:$IMAGE_TAG -f database/Dockerfile database/
+        # Tag the image for ECR
+        docker tag mysql:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/mysql:$IMAGE_TAG
+        # Push the image to ECR
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/mysql:$IMAGE_TAG
 
     - name: Output ECR Image URIs
       run: |
-        for service in $(docker-compose config --services); do
-          echo "ECR Image URI: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$service:$IMAGE_TAG"
-        done
+        echo "Webapp Image URI: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/webapp:$IMAGE_TAG"
+        echo "Redis Image URI: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/redis:$IMAGE_TAG"
+        echo "Nginx Image URI: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/nginx:$IMAGE_TAG"
+        echo "MySQL Image URI: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/mysql:$IMAGE_TAG"

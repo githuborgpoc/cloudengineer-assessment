@@ -1,13 +1,28 @@
-FROM node:18
+# Use official Node.js image as the base
+FROM node:14
 
+# Set working directory
 WORKDIR /app
 
+# Copy package.json and package-lock.json (if exists)
 COPY package*.json ./
 
+# Install dependencies
 RUN npm install
 
+# Copy the rest of the application
 COPY . .
 
+# Expose the port the app will run on
 EXPOSE 4000
 
+# Set environment variables
+ENV NODE_ENV=development
+ENV DATABASE_HOST=db
+ENV DATABASE_USER=fazt
+ENV DATABASE_PASSWORD=mypassword
+ENV DATABASE_NAME=linksdb
+ENV REDIS_HOST=redis
+
+# Run the app
 CMD ["npm", "run", "dev"]
