@@ -6,11 +6,11 @@ on:
       image_tag:
         description: 'Tag for the Docker image to deploy'
         required: true
-        default: '${{ github.sha }}'
+        default: ${{ github.sha }}  # Reference github.sha here
 
 env:
   AWS_REGION: "us-east-1"
-  IMAGE_TAG: ${{ github.event.inputs.image_tag || github.sha }}
+  IMAGE_TAG: ${{ github.event.inputs.image_tag || github.sha }}  # This ensures a fallback
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   ECS_CLUSTER_NAME: "your-ecs-cluster-name"
   ECS_SERVICE_NAME: "your-ecs-service-name"
@@ -31,9 +31,9 @@ jobs:
     - name: Set up AWS CLI
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Use secret for AWS Access Key ID
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Use secret for AWS Secret Access Key
-        aws-region: ${{ env.AWS_REGION }}  # Specify the AWS region correctly
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
 
     - name: Fetch current ECS task definition
       run: |
