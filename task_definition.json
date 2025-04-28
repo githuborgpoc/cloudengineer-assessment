@@ -17,7 +17,7 @@
             "environment": [
                 {
                     "name": "REDIS_HOST",
-                    "value": "redis"
+                    "value": "localhost"
                 },
                 {
                     "name": "NODE_ENV",
@@ -25,7 +25,7 @@
                 },
                 {
                     "name": "DATABASE_NAME",
-                    "value": "linksdb"
+                    "value": "users"
                 },
                 {
                     "name": "DATABASE_HOST",
@@ -153,7 +153,7 @@
             "environment": [
                 {
                     "name": "MYSQL_DATABASE",
-                    "value": "linksdb"
+                    "value": "users"
                 },
                 {
                     "name": "MYSQL_PASSWORD",
