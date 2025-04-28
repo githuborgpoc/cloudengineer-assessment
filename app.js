@@ -1,7 +1,6 @@
-const express = require('express');
-const mysql = require('mysql2');
-const redis = require('redis');
-const bodyParser = require('body-parser');
+import express from 'express';
+import mysql from 'mysql2';
+import bodyParser from 'body-parser';
 
 const app = express();
 const port = 4000;
@@ -18,16 +17,6 @@ const dbConnection = mysql.createConnection({
   database: 'node_app', // MySQL database name
 });
 
-// Redis connection setup
-const redisClient = redis.createClient({
-  host: 'localhost',
-  port: 6379, // Default Redis port
-});
-
-redisClient.on('error', (err) => {
-  console.log('Redis error:', err);
-});
-
 // Connect to MySQL
 dbConnection.connect((err) => {
   if (err) {
@@ -37,94 +26,62 @@ dbConnection.connect((err) => {
   console.log('Connected to MySQL as id ' + dbConnection.threadId);
 });
 
-// Route to handle user input and store it in MySQL and Redis
-app.post('/add-data', (req, res) => {
+// Route to display a form for adding data
+app.get('/add-data-form', (req, res) => {
+  res.send(`
+    <h1>Add New User</h1>
+    <form action="/store-user" method="POST">
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <br>
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <br>
+      <button type="submit">Add User</button>
+    </form>
+  `);
+});
+
+// Route to handle the form submission and store data in MySQL
+app.post('/store-user', async (req, res) => {
   const { name, email } = req.body;
 
   if (!name || !email) {
     return res.status(400).json({ message: 'Name and email are required' });
   }
 
-  // Insert user data into MySQL
-  const query = 'INSERT INTO users (name, email) VALUES (?, ?)';
-  dbConnection.query(query, [name, email], (err, results) => {
-    if (err) {
-      console.error('Error inserting into MySQL:', err.stack);
-      return res.status(500).json({ message: 'Failed to insert data into MySQL' });
-    }
+  try {
+    // Insert user data into MySQL
+    const [results] = await dbConnection.promise().query(
+      'INSERT INTO users (name, email) VALUES (?, ?)',
+      [name, email]
+    );
 
-    // Prepare user data to cache in Redis
-    const userData = { id: results.insertId, name, email };
-
-    // Store data in Redis
-    redisClient.set(`user:${results.insertId}`, JSON.stringify(userData), (err) => {
-      if (err) {
-        console.error('Error saving data in Redis:', err);
-        return res.status(500).json({ message: 'Failed to save data in Redis' });
-      }
-
-      // Return a success response
-      res.status(201).json({
-        message: 'User added successfully!',
-        userId: results.insertId,
-        userData,
-      });
-    });
-  });
-});
-
-// Route to retrieve user data
-app.get('/get-user/:id', (req, res) => {
-  const userId = req.params.id;
-
-  // Check Redis cache first
-  redisClient.get(`user:${userId}`, (err, data) => {
-    if (err) {
-      console.error('Redis error:', err);
-      return res.status(500).json({ message: 'Error fetching data from Redis' });
-    }
-
-    if (data) {
-      // If data found in Redis, return it
-      return res.json({
-        message: 'User fetched from Redis!',
-        user: JSON.parse(data),
-      });
-    } else {
-      // If data not found in Redis, fetch from MySQL
-      const query = 'SELECT * FROM users WHERE id = ?';
-      dbConnection.query(query, [userId], (err, results) => {
-        if (err) {
-          console.error('Error fetching from MySQL:', err.stack);
-          return res.status(500).json({ message: 'Failed to fetch data from MySQL' });
-        }
-
-        if (results.length > 0) {
-          // Store in Redis for future requests
-          redisClient.set(
-            `user:${userId}`,
-            JSON.stringify(results[0]),
-            (err) => {
-              if (err) {
-                console.error('Error saving data in Redis:', err);
-              }
-            }
-          );
-          return res.json({
-            message: 'User fetched from MySQL and cached to Redis!',
-            user: results[0],
-          });
-        } else {
-          return res.status(404).json({ message: 'User not found' });
-        }
-      });
-    }
-  });
+    res.status(201).send(`
+      <h1>User Added Successfully!</h1>
+      <p>Name: ${name}</p>
+      <p>Email: ${email}</p>
+      <p>User ID: ${results.insertId}</p>
+      <p><a href="/">Go to Home</a></p>
+    `);
+  } catch (err) {
+    console.error('Error inserting into MySQL:', err);
+    res.status(500).send(`
+      <h1>Error Adding User</h1>
+      <p>Failed to store user data in the database.</p>
+      <p>${err.message}</p>
+      <p><a href="/add-data-form">Try Again</a></p>
+    `);
+  }
 });
 
 // Route to display a simple welcome page
 app.get('/', (req, res) => {
-  res.send('<h1>Welcome to the Node.js App with MySQL and Redis</h1>');
+  res.send('<h1>Welcome to the Node.js App with MySQL</h1><p><a href="/add-data-form">Add New User</a></p>');
 });
 
 // Start server
