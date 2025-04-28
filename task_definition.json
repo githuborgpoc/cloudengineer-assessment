@@ -76,7 +76,7 @@
                     "protocol": "tcp"
                 }
             ],
-            "essential": false,
+            "essential": true,
             "environment": [],
             "mountPoints": [],
             "volumesFrom": [],
@@ -114,7 +114,7 @@
                     "protocol": "tcp"
                 }
             ],
-            "essential": false,
+            "essential": true,
             "environment": [],
             "mountPoints": [],
             "volumesFrom": [],
@@ -158,7 +158,7 @@
                     "protocol": "tcp"
                 }
             ],
-            "essential": false,
+            "essential": true,
             "environment": [
                 {
                     "name": "MYSQL_DATABASE",
