@@ -1,4 +1,4 @@
-{
+git add {
   "name": "nodejs-mysql-notes",
   "version": "1.0.2",
   "description": "",
@@ -29,7 +29,8 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "timeago.js": "^4.0.2",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "body-parser": "^1.19.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

@@ -49,3 +49,12 @@ CREATE TABLE IF NOT EXISTS sessions (
   data JSON,                           -- Storing session data as JSON
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP  -- Time when session was created
 );
+
+CREATE DATABASE node_app;
+USE node_app;
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL
+);

@@ -23,5 +23,5 @@ ENV REDIS_HOST=redis
 
 
 # Run the app
-CMD ["sh", "-c", "rm -rf node_modules && npm install && npm run dev"]
+CMD ["sh", "-c", "rm -rf node_modules && npm install && node app.js"]
 
