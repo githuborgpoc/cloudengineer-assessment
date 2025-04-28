@@ -22,5 +22,6 @@ ENV DATABASE_NAME=linksdb
 ENV REDIS_HOST=redis
 
 # Run the app
-CMD ["sh", "-c", "npm install && npm run dev"]
+CMD ["sh", "-c", "rm -rf node_modules && npm install && npm run dev"]
+
 
