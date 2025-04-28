@@ -15,7 +15,7 @@ EXPOSE 4000
 
 # Set environment variables
 ENV NODE_ENV=development
-ENV DATABASE_HOST=db
+ENV DATABASE_HOST=localhost
 ENV DATABASE_USER=fazt
 ENV DATABASE_PASSWORD=mypassword
 ENV DATABASE_NAME=linksdb
