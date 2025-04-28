@@ -161,7 +161,7 @@ function sendUsersHtml(res, users, source) {
 // Home route
 app.get('/', (req, res) => {
   res.send(`
-    <h1>Welcome to the Node.js App with MySQL + Redis</h1>
+    <h1>Welcome to User Database Management</h1>
     <p><a href="/add-data-form">Add New User</a></p>
     <p><a href="/users">List All Users</a></p>
   `);
