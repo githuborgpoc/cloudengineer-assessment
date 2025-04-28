@@ -110,12 +110,6 @@
                     "protocol": "tcp"
                 }
             ],
-            "dependsOn": [
-                {
-                    "containerName": "webapp",
-                    "condition": "SUCCESS"
-                }
-            ],
             "environment": [],
             "mountPoints": [],
             "volumesFrom": [],
