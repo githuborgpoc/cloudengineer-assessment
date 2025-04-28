@@ -2,7 +2,7 @@
     "containerDefinitions": [
         {
             "name": "webapp",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/webapp:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/webapp:4436581ebe5e0b00db4fcff22c323382ddf6e8c3",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -13,7 +13,7 @@
                     "protocol": "tcp"
                 }
             ],
-            "essential": true,
+            "essential": false,
             "environment": [
                 {
                     "name": "REDIS_HOST",
@@ -45,7 +45,13 @@
             "linuxParameters": {
                 "initProcessEnabled": false
             },
-            "startTimeout": 30,
+            "dependsOn": [
+                {
+                    "containerName": "redis",
+                    "condition": "SUCCESS"
+                }
+            ],
+            "startTimeout": 150,
             "stopTimeout": 120,
             "user": "0",
             "privileged": false,
@@ -65,9 +71,10 @@
         },
         {
             "name": "redis",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/redis:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
-            "cpu": 1024,
-            "memory": 2048,
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/redis:4436581ebe5e0b00db4fcff22c323382ddf6e8c3",
+            "cpu": 4096,
+            "memory": 8192,
+            "memoryReservation": 2048,
             "portMappings": [
                 {
                     "name": "redis-6379-tcp",
@@ -76,14 +83,14 @@
                     "protocol": "tcp"
                 }
             ],
-            "essential": true,
+            "essential": false,
             "environment": [],
             "mountPoints": [],
             "volumesFrom": [],
             "linuxParameters": {
                 "initProcessEnabled": false
             },
-            "startTimeout": 30,
+            "startTimeout": 120,
             "stopTimeout": 120,
             "user": "0",
             "privileged": false,
@@ -103,7 +110,7 @@
         },
         {
             "name": "nginx",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/nginx:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/nginx:4436581ebe5e0b00db4fcff22c323382ddf6e8c3",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -114,14 +121,14 @@
                     "protocol": "tcp"
                 }
             ],
-            "essential": true,
+            "essential": false,
             "environment": [],
             "mountPoints": [],
             "volumesFrom": [],
             "linuxParameters": {
                 "initProcessEnabled": false
             },
-            "startTimeout": 30,
+            "startTimeout": 120,
             "stopTimeout": 120,
             "user": "0",
             "privileged": false,
@@ -141,7 +148,7 @@
         },
         {
             "name": "db",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/db:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/db:4436581ebe5e0b00db4fcff22c323382ddf6e8c3",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -176,7 +183,7 @@
             "linuxParameters": {
                 "initProcessEnabled": false
             },
-            "startTimeout": 30,
+            "startTimeout": 120,
             "stopTimeout": 120,
             "user": "0",
             "privileged": false,
@@ -204,8 +211,8 @@
     "requiresCompatibilities": [
         "FARGATE"
     ],
-    "cpu": "4096",
-    "memory": "8192",
+    "cpu": "8192",
+    "memory": "32768",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
