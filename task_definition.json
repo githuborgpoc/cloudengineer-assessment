@@ -29,7 +29,7 @@
                 },
                 {
                     "name": "DATABASE_HOST",
-                    "value": "db"
+                    "value": "localhost"
                 },
                 {
                     "name": "DATABASE_PASSWORD",
