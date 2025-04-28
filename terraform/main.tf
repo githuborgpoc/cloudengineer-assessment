@@ -2,22 +2,19 @@ provider "aws" {
   region = var.aws_region
 }
 
-# VPC
-resource "aws_vpc" "this" {
+resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr_block
 }
 
-# Subnet
-resource "aws_subnet" "this" {
-  vpc_id                  = aws_vpc.this.id
+resource "aws_subnet" "subnet" {
+  vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.subnet_cidr_block
   availability_zone       = var.subnet_az
   map_public_ip_on_launch = true
 }
 
-# Security Group
-resource "aws_security_group" "this" {
-  vpc_id = aws_vpc.this.id
+resource "aws_security_group" "sg" {
+  vpc_id = aws_vpc.vpc.id
 
   ingress {
     description = "Allow HTTP"
@@ -43,49 +40,6 @@ resource "aws_security_group" "this" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
-# # IAM Roles
-# resource "aws_iam_role" "ecs_task_execution_role" {
-#   name = "ecs-task-execution-role"
-
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [{
-#       Action    = "sts:AssumeRole"
-#       Effect    = "Allow"
-#       Principal = {
-#         Service = "ecs-tasks.amazonaws.com"
-#       }
-#     }]
-#   })
-# }
-
-# resource "aws_iam_role" "ecs_task_role" {
-#   name = "ecs-task-role"
-
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [{
-#       Action    = "sts:AssumeRole"
-#       Effect    = "Allow"
-#       Principal = {
-#         Service = "ecs-tasks.amazonaws.com"
-#       }
-#     }]
-#   })
-# }
-
-# resource "aws_iam_policy_attachment" "ecs_task_execution_policy" {
-#   name       = "ecs-task-execution-policy-attachment"
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-#   roles      = [aws_iam_role.ecs_task_execution_role.name]
-# }
-
-# resource "aws_iam_policy_attachment" "ecs_task_role_policy" {
-#   name       = "ecs-task-role-policy-attachment"
-#   policy_arn = aws_iam_policy.ecs_task_policy.arn
-#   roles      = [aws_iam_role.ecs_task_role.name]
-# }
 
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
@@ -189,23 +143,8 @@ module "ecs" {
         }
       }
 
-      subnet_ids = [aws_subnet.this.id]
-      security_group_rules = {
-        app_ingress_http = {
-          type                     = "ingress"
-          from_port                = 80
-          to_port                  = 80
-          protocol                 = "tcp"
-          source_security_group_id = aws_security_group.this.id
-        }
-        egress_all = {
-          type        = "egress"
-          from_port   = 0
-          to_port     = 0
-          protocol    = "-1"
-          cidr_blocks = ["0.0.0.0/0"]
-        }
-      }
+      subnet_ids = [aws_subnet.subnet.id]
+      security_group_ids = [aws_security_group.ecs_security_group.id]
     }
   }
 
@@ -214,37 +153,6 @@ module "ecs" {
     Project     = var.project_name
   }
 }
-
-# resource "aws_iam_policy" "ecs_task_policy" {
-#   name        = "AmazonEC2ContainerServiceRole"
-#   description = "Policy similar to AWS managed AmazonEC2ContainerServiceRole"
-
-#   policy = jsonencode({
-#     Version = "2012-10-17",
-#     Statement = [
-#       {
-#         Effect = "Allow",
-#         Action = [
-#           "ec2:AuthorizeSecurityGroupIngress",
-#           "ec2:Describe*",
-#           "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-#           "elasticloadbalancing:DeregisterTargets",
-#           "elasticloadbalancing:Describe*",
-#           "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-#           "elasticloadbalancing:RegisterTargets",
-#           "cloudwatch:*"
-#         ],
-#         Resource = "*"
-#       }
-#     ]
-#   })
-# }
-
-# resource "aws_iam_policy_attachment" "ecs_task_policy_attachment" {
-#   name       = "ecs-task-policy-attachment"
-#   policy_arn = aws_iam_policy.ecs_task_policy.arn
-#   roles      = [aws_iam_role.ecs_task_role.name]
-# }
 
 resource "aws_ecr_repository" "repos" {
   for_each            = toset(var.repository_names)
@@ -264,9 +172,8 @@ resource "aws_ecr_repository" "repos" {
   }
 }
 
-# Internet Gateway
-resource "aws_internet_gateway" "this" {
-  vpc_id = aws_vpc.this.id
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc.id
 
   tags = {
     Name = "${var.project_name}-igw"
@@ -274,12 +181,12 @@ resource "aws_internet_gateway" "this" {
 }
 
 # Route Table
-resource "aws_route_table" "this" {
-  vpc_id = aws_vpc.this.id
+resource "aws_route_table" "rtb" {
+  vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.this.id
+    gateway_id = aws_internet_gateway.igw.id
   }
 
   tags = {
@@ -288,7 +195,44 @@ resource "aws_route_table" "this" {
 }
 
 # Route Table Association
-resource "aws_route_table_association" "this" {
-  subnet_id      = aws_subnet.this.id
-  route_table_id = aws_route_table.this.id
+resource "aws_route_table_association" "rtb_assoc" {
+  subnet_id      = aws_subnet.subnet.id
+  route_table_id = aws_route_table.rtb.id
+}
+
+resource "aws_security_group" "ecs_sg" {
+  name        = "ecs_security_group"
+  description = "Security group for ECS instances"
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [var.vpc_cidr_block]
+  }
+  
+    ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "ecs_security_group"
+  }
 }
