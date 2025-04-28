@@ -1,9 +1,9 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:429121668835:task-definition/linksweb-service:13",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:429121668835:task-definition/linksweb-service:14",
     "containerDefinitions": [
         {
             "name": "db",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/webapp:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/db:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -58,7 +58,7 @@
         },
         {
             "name": "nginx",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/redis:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/nginx:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -96,7 +96,7 @@
         },
         {
             "name": "redis",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/nginx:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/redis:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -134,7 +134,7 @@
         },
         {
             "name": "webapp",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/db:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/webapp:58c3bf5b817a7dd6aa4944c197639694f8bf0c0e",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -200,7 +200,7 @@
     "taskRoleArn": "arn:aws:iam::429121668835:role/ecs-task-role",
     "executionRoleArn": "arn:aws:iam::429121668835:role/ecs-task-execution-role",
     "networkMode": "awsvpc",
-    "revision": 13,
+    "revision": 14,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -249,7 +249,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2025-04-27T16:23:00.496Z",
+    "registeredAt": "2025-04-28T05:16:15.902Z",
     "registeredBy": "arn:aws:iam::429121668835:root",
     "tags": [
         {
