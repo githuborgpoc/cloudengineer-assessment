@@ -1,5 +1,4 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:429121668835:task-definition/linksweb-service-custom:3",
     "containerDefinitions": [
         {
             "name": "webapp",
