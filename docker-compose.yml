@@ -27,7 +27,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_DATABASE=linksdb
+      - MYSQL_DATABASE=linksdb 
       - MYSQL_USER=fazt
       - MYSQL_PASSWORD=mypassword
       - MYSQL_ROOT_PASSWORD=mypassword
