@@ -8,7 +8,7 @@ on:
         required: true
 
 env:
-  AWS_REGION: "us-east-1"
+  AWS_REGION: "us-east-2"
   IMAGE_TAG: ${{ github.event.inputs.image_tag || github.sha }}  # This ensures a fallback
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   ECS_CLUSTER_NAME: "linksapp-cluster"

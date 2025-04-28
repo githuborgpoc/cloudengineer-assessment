@@ -1,8 +1,8 @@
 {
   "version": 4,
   "terraform_version": "1.11.4",
-  "serial": 39,
-  "lineage": "cd5c324e-cdee-978f-7bb5-4e578fe22cb7",
+  "serial": 75,
+  "lineage": "0eafed55-2b2d-2d51-ba08-d87f8a17ceb0",
   "outputs": {},
   "resources": [
     {
@@ -15,7 +15,7 @@
           "index_key": "db",
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:ecr:us-east-2:429121668835:repository/db",
+            "arn": "arn:aws:ecr:us-east-1:429121668835:repository/db",
             "encryption_configuration": [
               {
                 "encryption_type": "AES256",
@@ -32,7 +32,7 @@
             "image_tag_mutability": "MUTABLE",
             "name": "db",
             "registry_id": "429121668835",
-            "repository_url": "429121668835.dkr.ecr.us-east-2.amazonaws.com/db",
+            "repository_url": "429121668835.dkr.ecr.us-east-1.amazonaws.com/db",
             "tags": {
               "Name": "db"
             },
@@ -48,7 +48,7 @@
           "index_key": "nginx",
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:ecr:us-east-2:429121668835:repository/nginx",
+            "arn": "arn:aws:ecr:us-east-1:429121668835:repository/nginx",
             "encryption_configuration": [
               {
                 "encryption_type": "AES256",
@@ -65,7 +65,7 @@
             "image_tag_mutability": "MUTABLE",
             "name": "nginx",
             "registry_id": "429121668835",
-            "repository_url": "429121668835.dkr.ecr.us-east-2.amazonaws.com/nginx",
+            "repository_url": "429121668835.dkr.ecr.us-east-1.amazonaws.com/nginx",
             "tags": {
               "Name": "nginx"
             },
@@ -81,7 +81,7 @@
           "index_key": "redis",
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:ecr:us-east-2:429121668835:repository/redis",
+            "arn": "arn:aws:ecr:us-east-1:429121668835:repository/redis",
             "encryption_configuration": [
               {
                 "encryption_type": "AES256",
@@ -98,7 +98,7 @@
             "image_tag_mutability": "MUTABLE",
             "name": "redis",
             "registry_id": "429121668835",
-            "repository_url": "429121668835.dkr.ecr.us-east-2.amazonaws.com/redis",
+            "repository_url": "429121668835.dkr.ecr.us-east-1.amazonaws.com/redis",
             "tags": {
               "Name": "redis"
             },
@@ -114,7 +114,7 @@
           "index_key": "webapp",
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:ecr:us-east-2:429121668835:repository/webapp",
+            "arn": "arn:aws:ecr:us-east-1:429121668835:repository/webapp",
             "encryption_configuration": [
               {
                 "encryption_type": "AES256",
@@ -131,7 +131,7 @@
             "image_tag_mutability": "MUTABLE",
             "name": "webapp",
             "registry_id": "429121668835",
-            "repository_url": "429121668835.dkr.ecr.us-east-2.amazonaws.com/webapp",
+            "repository_url": "429121668835.dkr.ecr.us-east-1.amazonaws.com/webapp",
             "tags": {
               "Name": "webapp"
             },
@@ -147,6 +147,178 @@
     },
     {
       "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "ecs_task_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::429121668835:policy/AmazonEC2ContainerServiceRole",
+            "attachment_count": 1,
+            "description": "Policy similar to AWS managed AmazonEC2ContainerServiceRole",
+            "id": "arn:aws:iam::429121668835:policy/AmazonEC2ContainerServiceRole",
+            "name": "AmazonEC2ContainerServiceRole",
+            "name_prefix": "",
+            "path": "/",
+            "policy": "{\"Statement\":[{\"Action\":[\"ec2:AuthorizeSecurityGroupIngress\",\"ec2:Describe*\",\"elasticloadbalancing:DeregisterInstancesFromLoadBalancer\",\"elasticloadbalancing:DeregisterTargets\",\"elasticloadbalancing:Describe*\",\"elasticloadbalancing:RegisterInstancesWithLoadBalancer\",\"elasticloadbalancing:RegisterTargets\",\"cloudwatch:*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}",
+            "policy_id": "ANPAWH2NFA3R2CMXZMT7I",
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_policy_attachment",
+      "name": "ecs_task_execution_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "groups": [],
+            "id": "ecs-task-execution-policy-attachment",
+            "name": "ecs-task-execution-policy-attachment",
+            "policy_arn": "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
+            "roles": [
+              "ecs-task-execution-role"
+            ],
+            "users": []
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.ecs_task_execution_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_policy_attachment",
+      "name": "ecs_task_policy_attachment",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "groups": [],
+            "id": "ecs-task-policy-attachment",
+            "name": "ecs-task-policy-attachment",
+            "policy_arn": "arn:aws:iam::429121668835:policy/AmazonEC2ContainerServiceRole",
+            "roles": [
+              "ecs-task-role"
+            ],
+            "users": []
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_policy.ecs_task_policy",
+            "aws_iam_role.ecs_task_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_policy_attachment",
+      "name": "ecs_task_role_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "groups": [],
+            "id": "ecs-task-role-policy-attachment",
+            "name": "ecs-task-role-policy-attachment",
+            "policy_arn": "arn:aws:iam::429121668835:policy/AmazonEC2ContainerServiceRole",
+            "roles": [
+              "ecs-task-role"
+            ],
+            "users": []
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_policy.ecs_task_policy",
+            "aws_iam_role.ecs_task_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "ecs_task_execution_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::429121668835:role/ecs-task-execution-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ecs-tasks.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2025-04-27T10:39:56Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "ecs-task-execution-role",
+            "inline_policy": [],
+            "managed_policy_arns": [
+              "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+            ],
+            "max_session_duration": 3600,
+            "name": "ecs-task-execution-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROAWH2NFA3RS772GPDE2"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "ecs_task_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::429121668835:role/ecs-task-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ecs-tasks.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2025-04-27T10:39:56Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "ecs-task-role",
+            "inline_policy": [],
+            "managed_policy_arns": [
+              "arn:aws:iam::429121668835:policy/AmazonEC2ContainerServiceRole"
+            ],
+            "max_session_duration": 3600,
+            "name": "ecs-task-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROAWH2NFA3RY6N4BGQVF"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
       "type": "aws_internet_gateway",
       "name": "this",
       "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
@@ -154,8 +326,8 @@
         {
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:ec2:us-east-2:429121668835:internet-gateway/igw-0fbc40ef67ada722f",
-            "id": "igw-0fbc40ef67ada722f",
+            "arn": "arn:aws:ec2:us-east-1:429121668835:internet-gateway/igw-0db7b1bdab8952a5d",
+            "id": "igw-0db7b1bdab8952a5d",
             "owner_id": "429121668835",
             "tags": {
               "Name": "LinksApp-igw"
@@ -164,7 +336,7 @@
               "Name": "LinksApp-igw"
             },
             "timeouts": null,
-            "vpc_id": "vpc-085083de79af34823"
+            "vpc_id": "vpc-0c2ddc593faee1b99"
           },
           "sensitive_attributes": [],
           "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19",
@@ -183,8 +355,8 @@
         {
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:ec2:us-east-2:429121668835:route-table/rtb-04d628e228f3b089a",
-            "id": "rtb-04d628e228f3b089a",
+            "arn": "arn:aws:ec2:us-east-1:429121668835:route-table/rtb-06fee8799bfc6ce4e",
+            "id": "rtb-06fee8799bfc6ce4e",
             "owner_id": "429121668835",
             "propagating_vgws": [],
             "route": [
@@ -194,7 +366,7 @@
                 "core_network_arn": "",
                 "destination_prefix_list_id": "",
                 "egress_only_gateway_id": "",
-                "gateway_id": "igw-0fbc40ef67ada722f",
+                "gateway_id": "igw-0db7b1bdab8952a5d",
                 "ipv6_cidr_block": "",
                 "local_gateway_id": "",
                 "nat_gateway_id": "",
@@ -211,7 +383,7 @@
               "Name": "LinksApp-route-table"
             },
             "timeouts": null,
-            "vpc_id": "vpc-085083de79af34823"
+            "vpc_id": "vpc-0c2ddc593faee1b99"
           },
           "sensitive_attributes": [],
           "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
@@ -232,9 +404,9 @@
           "schema_version": 0,
           "attributes": {
             "gateway_id": "",
-            "id": "rtbassoc-0628b0251e7af7fb6",
-            "route_table_id": "rtb-04d628e228f3b089a",
-            "subnet_id": "subnet-061a9e56f94d7f746",
+            "id": "rtbassoc-0939293f74434afe2",
+            "route_table_id": "rtb-06fee8799bfc6ce4e",
+            "subnet_id": "subnet-08ebbf80f771630f7",
             "timeouts": null
           },
           "sensitive_attributes": [],
@@ -257,7 +429,7 @@
         {
           "schema_version": 1,
           "attributes": {
-            "arn": "arn:aws:ec2:us-east-2:429121668835:security-group/sg-03a0dcf2992a34727",
+            "arn": "arn:aws:ec2:us-east-1:429121668835:security-group/sg-052b8164d4a127d3d",
             "description": "Managed by Terraform",
             "egress": [
               {
@@ -274,7 +446,7 @@
                 "to_port": 0
               }
             ],
-            "id": "sg-03a0dcf2992a34727",
+            "id": "sg-052b8164d4a127d3d",
             "ingress": [
               {
                 "cidr_blocks": [
@@ -303,14 +475,14 @@
                 "to_port": 0
               }
             ],
-            "name": "terraform-20250428150026159900000001",
+            "name": "terraform-20250427104000954900000001",
             "name_prefix": "terraform-",
             "owner_id": "429121668835",
             "revoke_rules_on_delete": false,
             "tags": {},
             "tags_all": {},
             "timeouts": null,
-            "vpc_id": "vpc-085083de79af34823"
+            "vpc_id": "vpc-0c2ddc593faee1b99"
           },
           "sensitive_attributes": [],
           "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
@@ -330,17 +502,17 @@
         {
           "schema_version": 1,
           "attributes": {
-            "arn": "arn:aws:ec2:us-east-2:429121668835:subnet/subnet-061a9e56f94d7f746",
+            "arn": "arn:aws:ec2:us-east-1:429121668835:subnet/subnet-08ebbf80f771630f7",
             "assign_ipv6_address_on_creation": false,
-            "availability_zone": "us-east-2a",
-            "availability_zone_id": "use2-az1",
+            "availability_zone": "us-east-1a",
+            "availability_zone_id": "use1-az1",
             "cidr_block": "10.0.1.0/24",
             "customer_owned_ipv4_pool": "",
             "enable_dns64": false,
             "enable_lni_at_device_index": 0,
             "enable_resource_name_dns_a_record_on_launch": false,
             "enable_resource_name_dns_aaaa_record_on_launch": false,
-            "id": "subnet-061a9e56f94d7f746",
+            "id": "subnet-08ebbf80f771630f7",
             "ipv6_cidr_block": "",
             "ipv6_cidr_block_association_id": "",
             "ipv6_native": false,
@@ -348,11 +520,11 @@
             "map_public_ip_on_launch": true,
             "outpost_arn": "",
             "owner_id": "429121668835",
-            "private_dns_hostname_type_on_launch": "ip-name",
+            "private_dns_hostname_type_on_launch": "resource-name",
             "tags": {},
             "tags_all": {},
             "timeouts": null,
-            "vpc_id": "vpc-085083de79af34823"
+            "vpc_id": "vpc-0c2ddc593faee1b99"
           },
           "sensitive_attributes": [],
           "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
@@ -372,17 +544,17 @@
         {
           "schema_version": 1,
           "attributes": {
-            "arn": "arn:aws:ec2:us-east-2:429121668835:vpc/vpc-085083de79af34823",
+            "arn": "arn:aws:ec2:us-east-1:429121668835:vpc/vpc-0c2ddc593faee1b99",
             "assign_generated_ipv6_cidr_block": false,
             "cidr_block": "10.0.0.0/16",
-            "default_network_acl_id": "acl-01b1566d7ad59130f",
-            "default_route_table_id": "rtb-0860597bcd89cb478",
-            "default_security_group_id": "sg-00b2fd51a2f5b21ad",
-            "dhcp_options_id": "dopt-0ed1f784826a68739",
+            "default_network_acl_id": "acl-0eb4f4c5b148de61b",
+            "default_route_table_id": "rtb-0aaca65e9274668c2",
+            "default_security_group_id": "sg-0a44ed32ac48d9b31",
+            "dhcp_options_id": "dopt-024b081064a0a5b14",
             "enable_dns_hostnames": false,
             "enable_dns_support": true,
             "enable_network_address_usage_metrics": false,
-            "id": "vpc-085083de79af34823",
+            "id": "vpc-0c2ddc593faee1b99",
             "instance_tenancy": "default",
             "ipv4_ipam_pool_id": null,
             "ipv4_netmask_length": null,
@@ -391,7 +563,7 @@
             "ipv6_cidr_block_network_border_group": "",
             "ipv6_ipam_pool_id": "",
             "ipv6_netmask_length": 0,
-            "main_route_table_id": "rtb-0860597bcd89cb478",
+            "main_route_table_id": "rtb-0aaca65e9274668c2",
             "owner_id": "429121668835",
             "tags": {},
             "tags_all": {}
@@ -404,22 +576,6 @@
     },
     {
       "module": "module.ecs.module.cluster",
-      "mode": "data",
-      "type": "aws_iam_policy_document",
-      "name": "task_exec",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.cluster",
-      "mode": "data",
-      "type": "aws_iam_policy_document",
-      "name": "task_exec_assume",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.cluster",
       "mode": "managed",
       "type": "aws_cloudwatch_log_group",
       "name": "this",
@@ -429,7 +585,7 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:logs:us-east-2:429121668835:log-group:/aws/ecs/linksapp-cluster",
+            "arn": "arn:aws:logs:us-east-1:429121668835:log-group:/aws/ecs/linksapp-cluster",
             "id": "/aws/ecs/linksapp-cluster",
             "kms_key_id": "",
             "log_group_class": "STANDARD",
@@ -454,14 +610,6 @@
     {
       "module": "module.ecs.module.cluster",
       "mode": "managed",
-      "type": "aws_ecs_capacity_provider",
-      "name": "this",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.cluster",
-      "mode": "managed",
       "type": "aws_ecs_cluster",
       "name": "this",
       "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
@@ -470,7 +618,7 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:ecs:us-east-2:429121668835:cluster/linksapp-cluster",
+            "arn": "arn:aws:ecs:us-east-1:429121668835:cluster/linksapp-cluster",
             "configuration": [
               {
                 "execute_command_configuration": [
@@ -491,7 +639,7 @@
                 "managed_storage_configuration": []
               }
             ],
-            "id": "arn:aws:ecs:us-east-2:429121668835:cluster/linksapp-cluster",
+            "id": "arn:aws:ecs:us-east-1:429121668835:cluster/linksapp-cluster",
             "name": "linksapp-cluster",
             "service_connect_defaults": [],
             "setting": [
@@ -558,38 +706,6 @@
       ]
     },
     {
-      "module": "module.ecs.module.cluster",
-      "mode": "managed",
-      "type": "aws_iam_policy",
-      "name": "task_exec",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.cluster",
-      "mode": "managed",
-      "type": "aws_iam_role",
-      "name": "task_exec",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.cluster",
-      "mode": "managed",
-      "type": "aws_iam_role_policy_attachment",
-      "name": "task_exec",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.cluster",
-      "mode": "managed",
-      "type": "aws_iam_role_policy_attachment",
-      "name": "task_exec_additional",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
       "module": "module.ecs.module.service[\"linksweb-service\"]",
       "mode": "data",
       "type": "aws_caller_identity",
@@ -619,18 +735,18 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:ecs:us-east-2:429121668835:task-definition/linksweb-service:1",
-            "arn_without_revision": "arn:aws:ecs:us-east-2:429121668835:task-definition/linksweb-service",
-            "container_definitions": "[{\"cpu\":1024,\"environment\":[{\"name\":\"MYSQL_DATABASE\",\"value\":\"linksdb\"},{\"name\":\"MYSQL_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"MYSQL_ROOT_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"MYSQL_USER\",\"value\":\"fazt\"}],\"essential\":true,\"image\":\"mysql:8.0\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/linksweb-service/db\",\"awslogs-region\":\"us-east-2\",\"awslogs-stream-prefix\":\"ecs\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"db\",\"portMappings\":[{\"containerPort\":3306,\"hostPort\":3306,\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":1024,\"environment\":[],\"essential\":true,\"image\":\"nginx:latest\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/linksweb-service/nginx\",\"awslogs-region\":\"us-east-2\",\"awslogs-stream-prefix\":\"ecs\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"nginx\",\"portMappings\":[{\"containerPort\":80,\"hostPort\":80,\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":1024,\"environment\":[],\"essential\":true,\"image\":\"redis/redis-stack\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/linksweb-service/redis\",\"awslogs-region\":\"us-east-2\",\"awslogs-stream-prefix\":\"ecs\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"redis\",\"portMappings\":[{\"containerPort\":6379,\"hostPort\":6379,\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":1024,\"environment\":[{\"name\":\"DATABASE_HOST\",\"value\":\"db\"},{\"name\":\"DATABASE_NAME\",\"value\":\"linksdb\"},{\"name\":\"DATABASE_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"DATABASE_USER\",\"value\":\"fazt\"},{\"name\":\"NODE_ENV\",\"value\":\"development\"},{\"name\":\"REDIS_HOST\",\"value\":\"redis\"}],\"essential\":true,\"image\":\"node:latest\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-region\":\"us-east-2\",\"awslogs-stream-prefix\":\"ecs\",\"awslogs-group\":\"/aws/ecs/linksweb-service/webapp\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"webapp\",\"portMappings\":[{\"containerPort\":4000,\"hostPort\":4000,\"name\":\"webapp\",\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]}]",
-            "cpu": "4096",
+            "arn": "arn:aws:ecs:us-east-1:429121668835:task-definition/linksweb-service:50",
+            "arn_without_revision": "arn:aws:ecs:us-east-1:429121668835:task-definition/linksweb-service",
+            "container_definitions": "[{\"cpu\":1024,\"environment\":[{\"name\":\"HOSTNAME\",\"value\":\"db\"},{\"name\":\"MYSQL_DATABASE\",\"value\":\"linksdb\"},{\"name\":\"MYSQL_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"MYSQL_ROOT_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"MYSQL_USER\",\"value\":\"fazt\"}],\"essential\":true,\"image\":\"429121668835.dkr.ecr.us-east-1.amazonaws.com/db:39ca4d890e5762a5e730a9fc0a1754ab243e77b4\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-stream-prefix\":\"ecs\",\"awslogs-group\":\"/aws/ecs/linksweb-service/db\",\"awslogs-region\":\"us-east-1\"},\"secretOptions\":[]},\"memory\":2048,\"mountPoints\":[],\"name\":\"db\",\"portMappings\":[{\"containerPort\":3306,\"hostPort\":3306,\"name\":\"db-3306-tcp\",\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":false,\"startTimeout\":120,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":1024,\"dependsOn\":[{\"condition\":\"SUCCESS\",\"containerName\":\"webapp\"}],\"environment\":[],\"essential\":false,\"image\":\"429121668835.dkr.ecr.us-east-1.amazonaws.com/nginx:39ca4d890e5762a5e730a9fc0a1754ab243e77b4\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/linksweb-service/nginx\",\"awslogs-region\":\"us-east-1\",\"awslogs-stream-prefix\":\"ecs\"},\"secretOptions\":[]},\"memory\":2048,\"mountPoints\":[],\"name\":\"nginx\",\"portMappings\":[{\"containerPort\":80,\"hostPort\":80,\"name\":\"nginx-80-tcp\",\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":false,\"startTimeout\":120,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":4096,\"environment\":[{\"name\":\"HOSTNAME\",\"value\":\"redis\"}],\"essential\":false,\"image\":\"429121668835.dkr.ecr.us-east-1.amazonaws.com/redis:39ca4d890e5762a5e730a9fc0a1754ab243e77b4\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/linksweb-service/redis\",\"awslogs-region\":\"us-east-1\",\"awslogs-stream-prefix\":\"ecs\"},\"secretOptions\":[]},\"memory\":8192,\"memoryReservation\":2048,\"mountPoints\":[],\"name\":\"redis\",\"portMappings\":[{\"containerPort\":6379,\"hostPort\":6379,\"name\":\"redis-6379-tcp\",\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":false,\"startTimeout\":120,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":1024,\"dependsOn\":[{\"condition\":\"SUCCESS\",\"containerName\":\"redis\"}],\"environment\":[{\"name\":\"DATABASE_HOST\",\"value\":\"db\"},{\"name\":\"DATABASE_NAME\",\"value\":\"linksdb\"},{\"name\":\"DATABASE_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"DATABASE_USER\",\"value\":\"fazt\"},{\"name\":\"HOSTNAME\",\"value\":\"webapp\"},{\"name\":\"NODE_ENV\",\"value\":\"development\"},{\"name\":\"REDIS_HOST\",\"value\":\"redis\"}],\"essential\":false,\"image\":\"429121668835.dkr.ecr.us-east-1.amazonaws.com/webapp:39ca4d890e5762a5e730a9fc0a1754ab243e77b4\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/linksweb-service/webapp\",\"awslogs-region\":\"us-east-1\",\"awslogs-stream-prefix\":\"ecs\"},\"secretOptions\":[]},\"memory\":2048,\"mountPoints\":[],\"name\":\"webapp\",\"portMappings\":[{\"containerPort\":4000,\"hostPort\":4000,\"name\":\"webapp\",\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":false,\"startTimeout\":150,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]}]",
+            "cpu": "8192",
             "enable_fault_injection": false,
             "ephemeral_storage": [],
-            "execution_role_arn": "arn:aws:iam::429121668835:role/linksweb-service-20250428150039176000000003",
+            "execution_role_arn": "arn:aws:iam::429121668835:role/ecs-task-execution-role",
             "family": "linksweb-service",
-            "id": "arn:aws:ecs:us-east-2:429121668835:task-definition/linksweb-service:1",
+            "id": "arn:aws:ecs:us-east-1:429121668835:task-definition/linksweb-service:50",
             "inference_accelerator": [],
             "ipc_mode": "",
-            "memory": "8192",
+            "memory": "32768",
             "network_mode": "awsvpc",
             "pid_mode": "",
             "placement_constraints": [],
@@ -638,37 +754,16 @@
             "requires_compatibilities": [
               "FARGATE"
             ],
-            "revision": 1,
-            "runtime_platform": [
-              {
-                "cpu_architecture": "X86_64",
-                "operating_system_family": "LINUX"
-              }
-            ],
+            "revision": 50,
+            "runtime_platform": [],
             "status": "ACTIVE",
             "task_definition": "linksweb-service",
-            "task_role_arn": "arn:aws:iam::429121668835:role/linksweb-service-20250428150039181000000004",
+            "task_role_arn": "arn:aws:iam::429121668835:role/ecs-task-role",
             "volume": []
           },
           "sensitive_attributes": []
         }
       ]
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "data",
-      "type": "aws_iam_policy_document",
-      "name": "service",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "data",
-      "type": "aws_iam_policy_document",
-      "name": "service_assume",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
     },
     {
       "module": "module.ecs.module.service[\"linksweb-service\"]",
@@ -812,14 +907,6 @@
       "module": "module.ecs.module.service[\"linksweb-service\"]",
       "mode": "data",
       "type": "aws_iam_policy_document",
-      "name": "tasks",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "data",
-      "type": "aws_iam_policy_document",
       "name": "tasks_assume",
       "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
       "instances": [
@@ -827,9 +914,9 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "id": "3827857943",
-            "json": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"ECSTasksAssumeRole\",\n      \"Effect\": \"Allow\",\n      \"Action\": \"sts:AssumeRole\",\n      \"Principal\": {\n        \"Service\": \"ecs-tasks.amazonaws.com\"\n      },\n      \"Condition\": {\n        \"ArnLike\": {\n          \"aws:SourceArn\": \"arn:aws:ecs:us-east-2:429121668835:*\"\n        },\n        \"StringEquals\": {\n          \"aws:SourceAccount\": \"429121668835\"\n        }\n      }\n    }\n  ]\n}",
-            "minified_json": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"ECSTasksAssumeRole\",\"Effect\":\"Allow\",\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"ecs-tasks.amazonaws.com\"},\"Condition\":{\"ArnLike\":{\"aws:SourceArn\":\"arn:aws:ecs:us-east-2:429121668835:*\"},\"StringEquals\":{\"aws:SourceAccount\":\"429121668835\"}}}]}",
+            "id": "2934737651",
+            "json": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"ECSTasksAssumeRole\",\n      \"Effect\": \"Allow\",\n      \"Action\": \"sts:AssumeRole\",\n      \"Principal\": {\n        \"Service\": \"ecs-tasks.amazonaws.com\"\n      },\n      \"Condition\": {\n        \"ArnLike\": {\n          \"aws:SourceArn\": \"arn:aws:ecs:us-east-1:429121668835:*\"\n        },\n        \"StringEquals\": {\n          \"aws:SourceAccount\": \"429121668835\"\n        }\n      }\n    }\n  ]\n}",
+            "minified_json": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"ECSTasksAssumeRole\",\"Effect\":\"Allow\",\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"ecs-tasks.amazonaws.com\"},\"Condition\":{\"ArnLike\":{\"aws:SourceArn\":\"arn:aws:ecs:us-east-1:429121668835:*\"},\"StringEquals\":{\"aws:SourceAccount\":\"429121668835\"}}}]}",
             "override_json": null,
             "override_policy_documents": null,
             "policy_id": null,
@@ -844,7 +931,7 @@
                   {
                     "test": "ArnLike",
                     "values": [
-                      "arn:aws:ecs:us-east-2:429121668835:*"
+                      "arn:aws:ecs:us-east-1:429121668835:*"
                     ],
                     "variable": "aws:SourceArn"
                   },
@@ -907,10 +994,10 @@
         {
           "schema_version": 0,
           "attributes": {
-            "description": "US East (Ohio)",
-            "endpoint": "ec2.us-east-2.amazonaws.com",
-            "id": "us-east-2",
-            "name": "us-east-2"
+            "description": "US East (N. Virginia)",
+            "endpoint": "ec2.us-east-1.amazonaws.com",
+            "id": "us-east-1",
+            "name": "us-east-1"
           },
           "sensitive_attributes": []
         }
@@ -927,10 +1014,10 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:ec2:us-east-2:429121668835:subnet/subnet-061a9e56f94d7f746",
+            "arn": "arn:aws:ec2:us-east-1:429121668835:subnet/subnet-08ebbf80f771630f7",
             "assign_ipv6_address_on_creation": false,
-            "availability_zone": "us-east-2a",
-            "availability_zone_id": "use2-az1",
+            "availability_zone": "us-east-1a",
+            "availability_zone_id": "use1-az1",
             "available_ip_address_count": 250,
             "cidr_block": "10.0.1.0/24",
             "customer_owned_ipv4_pool": "",
@@ -940,7 +1027,7 @@
             "enable_resource_name_dns_a_record_on_launch": false,
             "enable_resource_name_dns_aaaa_record_on_launch": false,
             "filter": null,
-            "id": "subnet-061a9e56f94d7f746",
+            "id": "subnet-08ebbf80f771630f7",
             "ipv6_cidr_block": "",
             "ipv6_cidr_block_association_id": "",
             "ipv6_native": false,
@@ -948,11 +1035,11 @@
             "map_public_ip_on_launch": true,
             "outpost_arn": "",
             "owner_id": "429121668835",
-            "private_dns_hostname_type_on_launch": "ip-name",
+            "private_dns_hostname_type_on_launch": "resource-name",
             "state": "available",
             "tags": {},
             "timeouts": null,
-            "vpc_id": "vpc-085083de79af34823"
+            "vpc_id": "vpc-0c2ddc593faee1b99"
           },
           "sensitive_attributes": []
         }
@@ -970,10 +1057,10 @@
           "schema_version": 0,
           "attributes": {
             "alarm_arns": [
-              "arn:aws:cloudwatch:us-east-2:429121668835:alarm:TargetTracking-service/linksapp-cluster/linksweb-service-AlarmHigh-73bfea61-2ab5-4745-86e7-72ff51ea9a35",
-              "arn:aws:cloudwatch:us-east-2:429121668835:alarm:TargetTracking-service/linksapp-cluster/linksweb-service-AlarmLow-ab94b59f-a983-485b-b8e4-8ba46e1621c2"
+              "arn:aws:cloudwatch:us-east-1:429121668835:alarm:TargetTracking-service/linksapp-cluster/linksweb-service-AlarmHigh-5938f13e-0134-4b5d-8a17-e2cc21710cc8",
+              "arn:aws:cloudwatch:us-east-1:429121668835:alarm:TargetTracking-service/linksapp-cluster/linksweb-service-AlarmLow-9b88cdf3-727a-4bb6-b3ab-48694201ad62"
             ],
-            "arn": "arn:aws:autoscaling:us-east-2:429121668835:scalingPolicy:992df5e8-3a39-48eb-b0e9-b15deaf7e216:resource/ecs/service/linksapp-cluster/linksweb-service:policyName/cpu",
+            "arn": "arn:aws:autoscaling:us-east-1:429121668835:scalingPolicy:946f3788-bba9-4b1e-bf1e-87a600255d36:resource/ecs/service/linksapp-cluster/linksweb-service:policyName/cpu",
             "id": "cpu",
             "name": "cpu",
             "policy_type": "TargetTrackingScaling",
@@ -1038,10 +1125,10 @@
           "schema_version": 0,
           "attributes": {
             "alarm_arns": [
-              "arn:aws:cloudwatch:us-east-2:429121668835:alarm:TargetTracking-service/linksapp-cluster/linksweb-service-AlarmHigh-9b2c437f-37ea-49fd-bc6f-c9178723df94",
-              "arn:aws:cloudwatch:us-east-2:429121668835:alarm:TargetTracking-service/linksapp-cluster/linksweb-service-AlarmLow-a98d781e-6ea8-442a-9fc1-97810ee59cb4"
+              "arn:aws:cloudwatch:us-east-1:429121668835:alarm:TargetTracking-service/linksapp-cluster/linksweb-service-AlarmHigh-65c09543-cf6e-42c3-b361-8722a5626b1b",
+              "arn:aws:cloudwatch:us-east-1:429121668835:alarm:TargetTracking-service/linksapp-cluster/linksweb-service-AlarmLow-4e25cb86-7390-4ab4-9f87-87382176fcd0"
             ],
-            "arn": "arn:aws:autoscaling:us-east-2:429121668835:scalingPolicy:992df5e8-3a39-48eb-b0e9-b15deaf7e216:resource/ecs/service/linksapp-cluster/linksweb-service:policyName/memory",
+            "arn": "arn:aws:autoscaling:us-east-1:429121668835:scalingPolicy:946f3788-bba9-4b1e-bf1e-87a600255d36:resource/ecs/service/linksapp-cluster/linksweb-service:policyName/memory",
             "id": "memory",
             "name": "memory",
             "policy_type": "TargetTrackingScaling",
@@ -1106,14 +1193,6 @@
     {
       "module": "module.ecs.module.service[\"linksweb-service\"]",
       "mode": "managed",
-      "type": "aws_appautoscaling_scheduled_action",
-      "name": "this",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "managed",
       "type": "aws_appautoscaling_target",
       "name": "this",
       "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
@@ -1122,7 +1201,7 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:application-autoscaling:us-east-2:429121668835:scalable-target/0ec5992df5e83a3948ebb0e9b15deaf7e216",
+            "arn": "arn:aws:application-autoscaling:us-east-1:429121668835:scalable-target/0ec5946f3788bba94b1ebf1e87a600255d36",
             "id": "service/linksapp-cluster/linksweb-service",
             "max_capacity": 10,
             "min_capacity": 1,
@@ -1187,14 +1266,6 @@
       "module": "module.ecs.module.service[\"linksweb-service\"]",
       "mode": "managed",
       "type": "aws_ecs_service",
-      "name": "ignore_task_definition",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "managed",
-      "type": "aws_ecs_service",
       "name": "this",
       "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
       "instances": [
@@ -1205,7 +1276,7 @@
             "alarms": [],
             "availability_zone_rebalancing": "DISABLED",
             "capacity_provider_strategy": [],
-            "cluster": "arn:aws:ecs:us-east-2:429121668835:cluster/linksapp-cluster",
+            "cluster": "arn:aws:ecs:us-east-1:429121668835:cluster/linksapp-cluster",
             "deployment_circuit_breaker": [
               {
                 "enable": false,
@@ -1226,7 +1297,7 @@
             "force_new_deployment": true,
             "health_check_grace_period_seconds": 0,
             "iam_role": "/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
-            "id": "arn:aws:ecs:us-east-2:429121668835:service/linksapp-cluster/linksweb-service",
+            "id": "arn:aws:ecs:us-east-1:429121668835:service/linksapp-cluster/linksweb-service",
             "launch_type": "FARGATE",
             "load_balancer": [],
             "name": "linksweb-service",
@@ -1234,10 +1305,10 @@
               {
                 "assign_public_ip": true,
                 "security_groups": [
-                  "sg-0889d5b6effc9b370"
+                  "sg-07188565b7e3ea881"
                 ],
                 "subnets": [
-                  "subnet-061a9e56f94d7f746"
+                  "subnet-08ebbf80f771630f7"
                 ]
               }
             ],
@@ -1256,7 +1327,7 @@
               "Environment": "Development",
               "Project": "LinksApp"
             },
-            "task_definition": "linksweb-service:1",
+            "task_definition": "linksweb-service-custom:39",
             "timeouts": {
               "create": null,
               "delete": null,
@@ -1313,13 +1384,13 @@
           "index_key": 0,
           "schema_version": 1,
           "attributes": {
-            "arn": "arn:aws:ecs:us-east-2:429121668835:task-definition/linksweb-service:1",
-            "arn_without_revision": "arn:aws:ecs:us-east-2:429121668835:task-definition/linksweb-service",
-            "container_definitions": "[{\"cpu\":1024,\"environment\":[{\"name\":\"MYSQL_DATABASE\",\"value\":\"linksdb\"},{\"name\":\"MYSQL_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"MYSQL_ROOT_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"MYSQL_USER\",\"value\":\"fazt\"}],\"essential\":true,\"image\":\"mysql:8.0\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-region\":\"us-east-2\",\"awslogs-stream-prefix\":\"ecs\",\"awslogs-group\":\"/aws/ecs/linksweb-service/db\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"db\",\"portMappings\":[{\"containerPort\":3306,\"hostPort\":3306,\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":1024,\"environment\":[],\"essential\":true,\"image\":\"nginx:latest\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-region\":\"us-east-2\",\"awslogs-stream-prefix\":\"ecs\",\"awslogs-group\":\"/aws/ecs/linksweb-service/nginx\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"nginx\",\"portMappings\":[{\"containerPort\":80,\"hostPort\":80,\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":1024,\"environment\":[],\"essential\":true,\"image\":\"redis/redis-stack\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-stream-prefix\":\"ecs\",\"awslogs-group\":\"/aws/ecs/linksweb-service/redis\",\"awslogs-region\":\"us-east-2\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"redis\",\"portMappings\":[{\"containerPort\":6379,\"hostPort\":6379,\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":1024,\"environment\":[{\"name\":\"DATABASE_HOST\",\"value\":\"db\"},{\"name\":\"DATABASE_NAME\",\"value\":\"linksdb\"},{\"name\":\"DATABASE_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"DATABASE_USER\",\"value\":\"fazt\"},{\"name\":\"NODE_ENV\",\"value\":\"development\"},{\"name\":\"REDIS_HOST\",\"value\":\"redis\"}],\"essential\":true,\"image\":\"node:latest\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/linksweb-service/webapp\",\"awslogs-region\":\"us-east-2\",\"awslogs-stream-prefix\":\"ecs\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"webapp\",\"portMappings\":[{\"containerPort\":4000,\"hostPort\":4000,\"name\":\"webapp\",\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]}]",
+            "arn": "arn:aws:ecs:us-east-1:429121668835:task-definition/linksweb-service:10",
+            "arn_without_revision": "arn:aws:ecs:us-east-1:429121668835:task-definition/linksweb-service",
+            "container_definitions": "[{\"cpu\":1024,\"environment\":[{\"name\":\"MYSQL_DATABASE\",\"value\":\"linksdb\"},{\"name\":\"MYSQL_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"MYSQL_ROOT_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"MYSQL_USER\",\"value\":\"fazt\"}],\"essential\":true,\"image\":\"mysql:8.0\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/linksweb-service/db\",\"awslogs-region\":\"us-east-1\",\"awslogs-stream-prefix\":\"ecs\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"db\",\"portMappings\":[{\"containerPort\":3306,\"hostPort\":3306,\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":1024,\"environment\":[],\"essential\":true,\"image\":\"nginx:latest\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/aws/ecs/linksweb-service/nginx\",\"awslogs-region\":\"us-east-1\",\"awslogs-stream-prefix\":\"ecs\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"nginx\",\"portMappings\":[{\"containerPort\":80,\"hostPort\":80,\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":1024,\"environment\":[],\"essential\":true,\"image\":\"redis/redis-stack\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-region\":\"us-east-1\",\"awslogs-stream-prefix\":\"ecs\",\"awslogs-group\":\"/aws/ecs/linksweb-service/redis\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"redis\",\"portMappings\":[{\"containerPort\":6379,\"hostPort\":6379,\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]},{\"cpu\":1024,\"environment\":[{\"name\":\"DATABASE_HOST\",\"value\":\"db\"},{\"name\":\"DATABASE_NAME\",\"value\":\"linksdb\"},{\"name\":\"DATABASE_PASSWORD\",\"value\":\"mypassword\"},{\"name\":\"DATABASE_USER\",\"value\":\"fazt\"},{\"name\":\"NODE_ENV\",\"value\":\"development\"},{\"name\":\"REDIS_HOST\",\"value\":\"redis\"}],\"essential\":true,\"image\":\"node:latest\",\"interactive\":false,\"linuxParameters\":{\"initProcessEnabled\":false},\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-stream-prefix\":\"ecs\",\"awslogs-group\":\"/aws/ecs/linksweb-service/webapp\",\"awslogs-region\":\"us-east-1\"}},\"memory\":2048,\"mountPoints\":[],\"name\":\"webapp\",\"portMappings\":[{\"containerPort\":4000,\"hostPort\":4000,\"name\":\"webapp\",\"protocol\":\"tcp\"}],\"privileged\":false,\"pseudoTerminal\":false,\"readonlyRootFilesystem\":true,\"startTimeout\":30,\"stopTimeout\":120,\"systemControls\":[],\"user\":\"0\",\"volumesFrom\":[]}]",
             "cpu": "4096",
             "enable_fault_injection": false,
             "ephemeral_storage": [],
-            "execution_role_arn": "arn:aws:iam::429121668835:role/linksweb-service-20250428150039176000000003",
+            "execution_role_arn": "arn:aws:iam::429121668835:role/linksweb-service-20250427104013742000000003",
             "family": "linksweb-service",
             "id": "linksweb-service",
             "inference_accelerator": [],
@@ -1332,7 +1403,7 @@
             "requires_compatibilities": [
               "FARGATE"
             ],
-            "revision": 1,
+            "revision": 10,
             "runtime_platform": [
               {
                 "cpu_architecture": "X86_64",
@@ -1348,7 +1419,7 @@
               "Environment": "Development",
               "Project": "LinksApp"
             },
-            "task_role_arn": "arn:aws:iam::429121668835:role/linksweb-service-20250428150039181000000004",
+            "task_role_arn": "arn:aws:iam::429121668835:role/linksweb-service-20250427104013748900000004",
             "track_latest": false,
             "volume": []
           },
@@ -1380,30 +1451,6 @@
     {
       "module": "module.ecs.module.service[\"linksweb-service\"]",
       "mode": "managed",
-      "type": "aws_ecs_task_set",
-      "name": "ignore_task_definition",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "managed",
-      "type": "aws_ecs_task_set",
-      "name": "this",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "managed",
-      "type": "aws_iam_policy",
-      "name": "service",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "managed",
       "type": "aws_iam_policy",
       "name": "task_exec",
       "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
@@ -1412,15 +1459,15 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:iam::429121668835:policy/linksweb-service-20250428150039189400000005",
+            "arn": "arn:aws:iam::429121668835:policy/linksweb-service-20250427104013740800000002",
             "attachment_count": 1,
             "description": "Task execution role IAM policy",
-            "id": "arn:aws:iam::429121668835:policy/linksweb-service-20250428150039189400000005",
-            "name": "linksweb-service-20250428150039189400000005",
+            "id": "arn:aws:iam::429121668835:policy/linksweb-service-20250427104013740800000002",
+            "name": "linksweb-service-20250427104013740800000002",
             "name_prefix": "linksweb-service-",
             "path": "/",
             "policy": "{\"Statement\":[{\"Action\":[\"logs:PutLogEvents\",\"logs:CreateLogStream\"],\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"Logs\"},{\"Action\":[\"ecr:GetDownloadUrlForLayer\",\"ecr:GetAuthorizationToken\",\"ecr:BatchGetImage\",\"ecr:BatchCheckLayerAvailability\"],\"Effect\":\"Allow\",\"Resource\":\"*\",\"Sid\":\"ECR\"},{\"Action\":\"ssm:GetParameters\",\"Effect\":\"Allow\",\"Resource\":\"arn:aws:ssm:*:*:parameter/*\",\"Sid\":\"GetSSMParams\"},{\"Action\":\"secretsmanager:GetSecretValue\",\"Effect\":\"Allow\",\"Resource\":\"arn:aws:secretsmanager:*:*:secret:*\",\"Sid\":\"GetSecrets\"}],\"Version\":\"2012-10-17\"}",
-            "policy_id": "ANPAWH2NFA3R6RAUJBRXI",
+            "policy_id": "ANPAWH2NFA3RVYZZYXRTW",
             "tags": {
               "Environment": "Development",
               "Project": "LinksApp"
@@ -1446,14 +1493,6 @@
       "module": "module.ecs.module.service[\"linksweb-service\"]",
       "mode": "managed",
       "type": "aws_iam_role",
-      "name": "service",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "managed",
-      "type": "aws_iam_role",
       "name": "task_exec",
       "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
       "instances": [
@@ -1461,18 +1500,18 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:iam::429121668835:role/linksweb-service-20250428150039176000000003",
+            "arn": "arn:aws:iam::429121668835:role/linksweb-service-20250427104013742000000003",
             "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ecs-tasks.amazonaws.com\"},\"Sid\":\"ECSTaskExecutionAssumeRole\"}],\"Version\":\"2012-10-17\"}",
-            "create_date": "2025-04-28T15:00:39Z",
+            "create_date": "2025-04-27T10:40:13Z",
             "description": "Task execution role for linksweb-service",
             "force_detach_policies": true,
-            "id": "linksweb-service-20250428150039176000000003",
+            "id": "linksweb-service-20250427104013742000000003",
             "inline_policy": [],
             "managed_policy_arns": [
-              "arn:aws:iam::429121668835:policy/linksweb-service-20250428150039189400000005"
+              "arn:aws:iam::429121668835:policy/linksweb-service-20250427104013740800000002"
             ],
             "max_session_duration": 3600,
-            "name": "linksweb-service-20250428150039176000000003",
+            "name": "linksweb-service-20250427104013742000000003",
             "name_prefix": "linksweb-service-",
             "path": "/",
             "permissions_boundary": "",
@@ -1484,7 +1523,7 @@
               "Environment": "Development",
               "Project": "LinksApp"
             },
-            "unique_id": "AROAWH2NFA3RSLDEJZRXB"
+            "unique_id": "AROAWH2NFA3R3GA2UNACR"
           },
           "sensitive_attributes": [],
           "private": "bnVsbA==",
@@ -1509,16 +1548,16 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:iam::429121668835:role/linksweb-service-20250428150039181000000004",
-            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Condition\":{\"ArnLike\":{\"aws:SourceArn\":\"arn:aws:ecs:us-east-2:429121668835:*\"},\"StringEquals\":{\"aws:SourceAccount\":\"429121668835\"}},\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ecs-tasks.amazonaws.com\"},\"Sid\":\"ECSTasksAssumeRole\"}],\"Version\":\"2012-10-17\"}",
-            "create_date": "2025-04-28T15:00:39Z",
+            "arn": "arn:aws:iam::429121668835:role/linksweb-service-20250427104013748900000004",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Condition\":{\"ArnLike\":{\"aws:SourceArn\":\"arn:aws:ecs:us-east-1:429121668835:*\"},\"StringEquals\":{\"aws:SourceAccount\":\"429121668835\"}},\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ecs-tasks.amazonaws.com\"},\"Sid\":\"ECSTasksAssumeRole\"}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2025-04-27T10:40:14Z",
             "description": "",
             "force_detach_policies": true,
-            "id": "linksweb-service-20250428150039181000000004",
+            "id": "linksweb-service-20250427104013748900000004",
             "inline_policy": [],
             "managed_policy_arns": [],
             "max_session_duration": 3600,
-            "name": "linksweb-service-20250428150039181000000004",
+            "name": "linksweb-service-20250427104013748900000004",
             "name_prefix": "linksweb-service-",
             "path": "/",
             "permissions_boundary": "",
@@ -1530,7 +1569,7 @@
               "Environment": "Development",
               "Project": "LinksApp"
             },
-            "unique_id": "AROAWH2NFA3RXMXNOP3YB"
+            "unique_id": "AROAWH2NFA3RZQEJ4EL3G"
           },
           "sensitive_attributes": [],
           "private": "bnVsbA==",
@@ -1550,22 +1589,6 @@
     {
       "module": "module.ecs.module.service[\"linksweb-service\"]",
       "mode": "managed",
-      "type": "aws_iam_role_policy",
-      "name": "tasks",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "managed",
-      "type": "aws_iam_role_policy_attachment",
-      "name": "service",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "managed",
       "type": "aws_iam_role_policy_attachment",
       "name": "task_exec",
       "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
@@ -1574,9 +1597,9 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "id": "linksweb-service-20250428150039176000000003-20250428150040701400000007",
-            "policy_arn": "arn:aws:iam::429121668835:policy/linksweb-service-20250428150039189400000005",
-            "role": "linksweb-service-20250428150039176000000003"
+            "id": "linksweb-service-20250427104013742000000003-20250427104015382900000006",
+            "policy_arn": "arn:aws:iam::429121668835:policy/linksweb-service-20250427104013740800000002",
+            "role": "linksweb-service-20250427104013742000000003"
           },
           "sensitive_attributes": [],
           "private": "bnVsbA==",
@@ -1596,22 +1619,6 @@
     {
       "module": "module.ecs.module.service[\"linksweb-service\"]",
       "mode": "managed",
-      "type": "aws_iam_role_policy_attachment",
-      "name": "task_exec_additional",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "managed",
-      "type": "aws_iam_role_policy_attachment",
-      "name": "tasks",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
-    },
-    {
-      "module": "module.ecs.module.service[\"linksweb-service\"]",
-      "mode": "managed",
       "type": "aws_security_group",
       "name": "this",
       "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
@@ -1620,7 +1627,7 @@
           "index_key": 0,
           "schema_version": 1,
           "attributes": {
-            "arn": "arn:aws:ec2:us-east-2:429121668835:security-group/sg-0889d5b6effc9b370",
+            "arn": "arn:aws:ec2:us-east-1:429121668835:security-group/sg-07188565b7e3ea881",
             "description": "Managed by Terraform",
             "egress": [
               {
@@ -1635,25 +1642,103 @@
                 "security_groups": [],
                 "self": false,
                 "to_port": 0
-              }
-            ],
-            "id": "sg-0889d5b6effc9b370",
-            "ingress": [
+              },
               {
                 "cidr_blocks": [],
+                "description": "",
+                "from_port": 0,
+                "ipv6_cidr_blocks": [
+                  "::/0"
+                ],
+                "prefix_list_ids": [],
+                "protocol": "-1",
+                "security_groups": [],
+                "self": false,
+                "to_port": 0
+              }
+            ],
+            "id": "sg-07188565b7e3ea881",
+            "ingress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "",
+                "from_port": 4000,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 4000
+              },
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "",
+                "from_port": 443,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 443
+              },
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
                 "description": "",
                 "from_port": 80,
                 "ipv6_cidr_blocks": [],
                 "prefix_list_ids": [],
                 "protocol": "tcp",
-                "security_groups": [
-                  "sg-03a0dcf2992a34727"
-                ],
+                "security_groups": [],
                 "self": false,
                 "to_port": 80
+              },
+              {
+                "cidr_blocks": [
+                  "10.0.0.0/8"
+                ],
+                "description": "",
+                "from_port": 0,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "-1",
+                "security_groups": [],
+                "self": false,
+                "to_port": 0
+              },
+              {
+                "cidr_blocks": [
+                  "10.0.0.0/8"
+                ],
+                "description": "",
+                "from_port": 3306,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 3306
+              },
+              {
+                "cidr_blocks": [
+                  "10.0.0.0/8"
+                ],
+                "description": "",
+                "from_port": 6379,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 6379
               }
             ],
-            "name": "linksweb-service-20250428150039532500000006",
+            "name": "linksweb-service-20250427104014076500000005",
             "name_prefix": "linksweb-service-",
             "owner_id": "429121668835",
             "revoke_rules_on_delete": false,
@@ -1668,7 +1753,7 @@
               "Project": "LinksApp"
             },
             "timeouts": null,
-            "vpc_id": "vpc-085083de79af34823"
+            "vpc_id": "vpc-0c2ddc593faee1b99"
           },
           "sensitive_attributes": [],
           "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
@@ -1696,14 +1781,14 @@
             "cidr_blocks": null,
             "description": null,
             "from_port": 80,
-            "id": "sgrule-1909363879",
+            "id": "sgrule-2037889457",
             "ipv6_cidr_blocks": null,
             "prefix_list_ids": null,
             "protocol": "tcp",
-            "security_group_id": "sg-0889d5b6effc9b370",
-            "security_group_rule_id": "sgr-075ee7e30b3846281",
+            "security_group_id": "sg-07188565b7e3ea881",
+            "security_group_rule_id": "sgr-0bc94ae84a370eb8b",
             "self": false,
-            "source_security_group_id": "sg-03a0dcf2992a34727",
+            "source_security_group_id": "sg-052b8164d4a127d3d",
             "timeouts": null,
             "to_port": 80,
             "type": "ingress"
@@ -1727,12 +1812,12 @@
             ],
             "description": null,
             "from_port": 0,
-            "id": "sgrule-1750740991",
+            "id": "sgrule-1772880930",
             "ipv6_cidr_blocks": null,
             "prefix_list_ids": null,
             "protocol": "-1",
-            "security_group_id": "sg-0889d5b6effc9b370",
-            "security_group_rule_id": "sgr-0db44e7b96bc7e14e",
+            "security_group_id": "sg-07188565b7e3ea881",
+            "security_group_rule_id": "sgr-087c108e3b609bb4f",
             "self": false,
             "source_security_group_id": null,
             "timeouts": null,
@@ -1761,10 +1846,10 @@
         {
           "schema_version": 0,
           "attributes": {
-            "description": "US East (Ohio)",
-            "endpoint": "ec2.us-east-2.amazonaws.com",
-            "id": "us-east-2",
-            "name": "us-east-2"
+            "description": "US East (N. Virginia)",
+            "endpoint": "ec2.us-east-1.amazonaws.com",
+            "id": "us-east-1",
+            "name": "us-east-1"
           },
           "sensitive_attributes": []
         }
@@ -1781,7 +1866,7 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:logs:us-east-2:429121668835:log-group:/aws/ecs/linksweb-service/db",
+            "arn": "arn:aws:logs:us-east-1:429121668835:log-group:/aws/ecs/linksweb-service/db",
             "id": "/aws/ecs/linksweb-service/db",
             "kms_key_id": "",
             "log_group_class": "STANDARD",
@@ -1819,10 +1904,10 @@
         {
           "schema_version": 0,
           "attributes": {
-            "description": "US East (Ohio)",
-            "endpoint": "ec2.us-east-2.amazonaws.com",
-            "id": "us-east-2",
-            "name": "us-east-2"
+            "description": "US East (N. Virginia)",
+            "endpoint": "ec2.us-east-1.amazonaws.com",
+            "id": "us-east-1",
+            "name": "us-east-1"
           },
           "sensitive_attributes": []
         }
@@ -1839,7 +1924,7 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:logs:us-east-2:429121668835:log-group:/aws/ecs/linksweb-service/nginx",
+            "arn": "arn:aws:logs:us-east-1:429121668835:log-group:/aws/ecs/linksweb-service/nginx",
             "id": "/aws/ecs/linksweb-service/nginx",
             "kms_key_id": "",
             "log_group_class": "STANDARD",
@@ -1877,10 +1962,10 @@
         {
           "schema_version": 0,
           "attributes": {
-            "description": "US East (Ohio)",
-            "endpoint": "ec2.us-east-2.amazonaws.com",
-            "id": "us-east-2",
-            "name": "us-east-2"
+            "description": "US East (N. Virginia)",
+            "endpoint": "ec2.us-east-1.amazonaws.com",
+            "id": "us-east-1",
+            "name": "us-east-1"
           },
           "sensitive_attributes": []
         }
@@ -1897,7 +1982,7 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:logs:us-east-2:429121668835:log-group:/aws/ecs/linksweb-service/redis",
+            "arn": "arn:aws:logs:us-east-1:429121668835:log-group:/aws/ecs/linksweb-service/redis",
             "id": "/aws/ecs/linksweb-service/redis",
             "kms_key_id": "",
             "log_group_class": "STANDARD",
@@ -1935,10 +2020,10 @@
         {
           "schema_version": 0,
           "attributes": {
-            "description": "US East (Ohio)",
-            "endpoint": "ec2.us-east-2.amazonaws.com",
-            "id": "us-east-2",
-            "name": "us-east-2"
+            "description": "US East (N. Virginia)",
+            "endpoint": "ec2.us-east-1.amazonaws.com",
+            "id": "us-east-1",
+            "name": "us-east-1"
           },
           "sensitive_attributes": []
         }
@@ -1955,7 +2040,7 @@
           "index_key": 0,
           "schema_version": 0,
           "attributes": {
-            "arn": "arn:aws:logs:us-east-2:429121668835:log-group:/aws/ecs/linksweb-service/webapp",
+            "arn": "arn:aws:logs:us-east-1:429121668835:log-group:/aws/ecs/linksweb-service/webapp",
             "id": "/aws/ecs/linksweb-service/webapp",
             "kms_key_id": "",
             "log_group_class": "STANDARD",

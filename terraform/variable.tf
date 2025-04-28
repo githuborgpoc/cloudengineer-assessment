@@ -1,6 +1,6 @@
 variable "aws_region" {
   description = "AWS Region"
-  default     = "us-east-1"
+  default     = "us-east-2"
 }
 
 variable "vpc_cidr_block" {
@@ -15,7 +15,7 @@ variable "subnet_cidr_block" {
 
 variable "subnet_az" {
   description = "Availability Zone for Subnet"
-  default     = "us-east-1a"
+  default     = "us-east-2a"
 }
 
 variable "ecs_cluster_name" {

@@ -2,7 +2,7 @@
     "containerDefinitions": [
         {
             "name": "webapp",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/webapp:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
+            "image": "429121668835.dkr.ecr.us-east-2.amazonaws.com/webapp:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -56,7 +56,7 @@
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-group": "/aws/ecs/linksweb-service/webapp",
-                    "awslogs-region": "us-east-1",
+                    "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
             },
@@ -64,7 +64,7 @@
         },
         {
             "name": "redis",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/redis:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
+            "image": "429121668835.dkr.ecr.us-east-2.amazonaws.com/redis:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
             "cpu": 4096,
             "memory": 8192,
             "portMappings": [
@@ -93,7 +93,7 @@
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-group": "/aws/ecs/linksweb-service/redis",
-                    "awslogs-region": "us-east-1",
+                    "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
             },
@@ -101,7 +101,7 @@
         },
         {
             "name": "nginx",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/nginx:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
+            "image": "429121668835.dkr.ecr.us-east-2.amazonaws.com/nginx:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -130,7 +130,7 @@
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-group": "/aws/ecs/linksweb-service/nginx",
-                    "awslogs-region": "us-east-1",
+                    "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
             },
@@ -138,7 +138,7 @@
         },
         {
             "name": "db",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/db:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
+            "image": "429121668835.dkr.ecr.us-east-2.amazonaws.com/db:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -184,7 +184,7 @@
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-group": "/aws/ecs/linksweb-service/db",
-                    "awslogs-region": "us-east-1",
+                    "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
             },

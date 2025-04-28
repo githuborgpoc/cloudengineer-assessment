@@ -28,19 +28,11 @@ resource "aws_security_group" "this" {
   }
 
   ingress {
-    description = "Allow MySQL"
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "Allow Redis"
-    from_port   = 6379
-    to_port     = 6379
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow VPC Traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [var.vpc_cidr_block]
   }
 
   egress {
@@ -52,48 +44,48 @@ resource "aws_security_group" "this" {
   }
 }
 
-# IAM Roles
-resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecs-task-execution-role"
+# # IAM Roles
+# resource "aws_iam_role" "ecs_task_execution_role" {
+#   name = "ecs-task-execution-role"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action    = "sts:AssumeRole"
-      Effect    = "Allow"
-      Principal = {
-        Service = "ecs-tasks.amazonaws.com"
-      }
-    }]
-  })
-}
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [{
+#       Action    = "sts:AssumeRole"
+#       Effect    = "Allow"
+#       Principal = {
+#         Service = "ecs-tasks.amazonaws.com"
+#       }
+#     }]
+#   })
+# }
 
-resource "aws_iam_role" "ecs_task_role" {
-  name = "ecs-task-role"
+# resource "aws_iam_role" "ecs_task_role" {
+#   name = "ecs-task-role"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action    = "sts:AssumeRole"
-      Effect    = "Allow"
-      Principal = {
-        Service = "ecs-tasks.amazonaws.com"
-      }
-    }]
-  })
-}
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [{
+#       Action    = "sts:AssumeRole"
+#       Effect    = "Allow"
+#       Principal = {
+#         Service = "ecs-tasks.amazonaws.com"
+#       }
+#     }]
+#   })
+# }
 
-resource "aws_iam_policy_attachment" "ecs_task_execution_policy" {
-  name       = "ecs-task-execution-policy-attachment"
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-  roles      = [aws_iam_role.ecs_task_execution_role.name]
-}
+# resource "aws_iam_policy_attachment" "ecs_task_execution_policy" {
+#   name       = "ecs-task-execution-policy-attachment"
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+#   roles      = [aws_iam_role.ecs_task_execution_role.name]
+# }
 
-resource "aws_iam_policy_attachment" "ecs_task_role_policy" {
-  name       = "ecs-task-role-policy-attachment"
-  policy_arn = aws_iam_policy.ecs_task_policy.arn
-  roles      = [aws_iam_role.ecs_task_role.name]
-}
+# resource "aws_iam_policy_attachment" "ecs_task_role_policy" {
+#   name       = "ecs-task-role-policy-attachment"
+#   policy_arn = aws_iam_policy.ecs_task_policy.arn
+#   roles      = [aws_iam_role.ecs_task_role.name]
+# }
 
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
@@ -223,36 +215,36 @@ module "ecs" {
   }
 }
 
-resource "aws_iam_policy" "ecs_task_policy" {
-  name        = "AmazonEC2ContainerServiceRole"
-  description = "Policy similar to AWS managed AmazonEC2ContainerServiceRole"
+# resource "aws_iam_policy" "ecs_task_policy" {
+#   name        = "AmazonEC2ContainerServiceRole"
+#   description = "Policy similar to AWS managed AmazonEC2ContainerServiceRole"
 
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = [
-          "ec2:AuthorizeSecurityGroupIngress",
-          "ec2:Describe*",
-          "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-          "elasticloadbalancing:DeregisterTargets",
-          "elasticloadbalancing:Describe*",
-          "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-          "elasticloadbalancing:RegisterTargets",
-          "cloudwatch:*"
-        ],
-        Resource = "*"
-      }
-    ]
-  })
-}
+#   policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       {
+#         Effect = "Allow",
+#         Action = [
+#           "ec2:AuthorizeSecurityGroupIngress",
+#           "ec2:Describe*",
+#           "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+#           "elasticloadbalancing:DeregisterTargets",
+#           "elasticloadbalancing:Describe*",
+#           "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+#           "elasticloadbalancing:RegisterTargets",
+#           "cloudwatch:*"
+#         ],
+#         Resource = "*"
+#       }
+#     ]
+#   })
+# }
 
-resource "aws_iam_policy_attachment" "ecs_task_policy_attachment" {
-  name       = "ecs-task-policy-attachment"
-  policy_arn = aws_iam_policy.ecs_task_policy.arn
-  roles      = [aws_iam_role.ecs_task_role.name]
-}
+# resource "aws_iam_policy_attachment" "ecs_task_policy_attachment" {
+#   name       = "ecs-task-policy-attachment"
+#   policy_arn = aws_iam_policy.ecs_task_policy.arn
+#   roles      = [aws_iam_role.ecs_task_role.name]
+# }
 
 resource "aws_ecr_repository" "repos" {
   for_each            = toset(var.repository_names)
