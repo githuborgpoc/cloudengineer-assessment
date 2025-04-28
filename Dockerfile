@@ -6,7 +6,6 @@ WORKDIR /app
 
 # Copy package.json and package-lock.json (if exists)
 COPY package*.json ./
-ENV HOSTNAME=webapp
 
 # Copy the rest of the application
 COPY . .
