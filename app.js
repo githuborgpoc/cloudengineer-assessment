@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // MySQL Connection Pool
 const pool = mysql.createPool({
-  host: 'db',          // Your MySQL service name from docker-compose
+  host: 'localhost',          // Your MySQL service name from docker-compose
   user: 'fazt',        // MySQL username
   password: 'mypassword', // MySQL password
   database: 'users',   // Database name
@@ -23,7 +23,7 @@ const pool = mysql.createPool({
 
 // Redis Client Setup
 const redisClient = createClient({
-  url: 'redis://redis:6379', // Redis service name from docker-compose
+  url: 'redis://localhost:6379', // Redis service name from docker-compose
 });
 
 redisClient.on('error', (err) => console.error('Redis Client Error', err));
