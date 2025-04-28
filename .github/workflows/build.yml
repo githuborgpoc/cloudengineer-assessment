@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - main
+      - prod
 
 env:
   AWS_REGION: "us-east-1"
