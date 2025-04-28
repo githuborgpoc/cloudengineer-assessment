@@ -18,8 +18,8 @@ ENV NODE_ENV=development
 ENV DATABASE_HOST=localhost
 ENV DATABASE_USER=fazt
 ENV DATABASE_PASSWORD=mypassword
-ENV DATABASE_NAME=linksdb
-ENV REDIS_HOST=redis
+ENV DATABASE_NAME=users
+ENV REDIS_HOST=localhost
 
 
 # Run the app
