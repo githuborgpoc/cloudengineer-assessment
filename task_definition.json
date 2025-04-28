@@ -2,9 +2,9 @@
     "containerDefinitions": [
         {
             "name": "webapp",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/webapp:7803581339a6564172943204bded9aff5ff3acde",
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/webapp:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
             "cpu": 1024,
-            "memory": 4096,
+            "memory": 2048,
             "portMappings": [
                 {
                     "name": "webapp",
@@ -13,7 +13,7 @@
                     "protocol": "tcp"
                 }
             ],
-            "essential": false,
+            "essential": true,
             "environment": [
                 {
                     "name": "REDIS_HOST",
@@ -58,16 +58,15 @@
                     "awslogs-group": "/aws/ecs/linksweb-service/webapp",
                     "awslogs-region": "us-east-1",
                     "awslogs-stream-prefix": "ecs"
-                },
-                "secretOptions": []
+                }
             },
             "systemControls": []
         },
         {
             "name": "redis",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/redis:7803581339a6564172943204bded9aff5ff3acde",
-            "cpu": 4096,
-            "memory": 8192,
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/redis:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
+            "cpu": 1024,
+            "memory": 2048,
             "portMappings": [
                 {
                     "name": "redis-6379-tcp",
@@ -96,14 +95,13 @@
                     "awslogs-group": "/aws/ecs/linksweb-service/redis",
                     "awslogs-region": "us-east-1",
                     "awslogs-stream-prefix": "ecs"
-                },
-                "secretOptions": []
+                }
             },
             "systemControls": []
         },
         {
             "name": "nginx",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/nginx:7803581339a6564172943204bded9aff5ff3acde",
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/nginx:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -121,12 +119,6 @@
             "linuxParameters": {
                 "initProcessEnabled": false
             },
-            "dependsOn": [
-                {
-                    "containerName": "webapp",
-                    "condition": "SUCCESS"
-                }
-            ],
             "startTimeout": 30,
             "stopTimeout": 120,
             "user": "0",
@@ -140,14 +132,13 @@
                     "awslogs-group": "/aws/ecs/linksweb-service/nginx",
                     "awslogs-region": "us-east-1",
                     "awslogs-stream-prefix": "ecs"
-                },
-                "secretOptions": []
+                }
             },
             "systemControls": []
         },
         {
             "name": "db",
-            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/db:7803581339a6564172943204bded9aff5ff3acde",
+            "image": "429121668835.dkr.ecr.us-east-1.amazonaws.com/db:6e73cde62dcdc9b2c940d8e87664c4069bfb0906",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -195,8 +186,7 @@
                     "awslogs-group": "/aws/ecs/linksweb-service/db",
                     "awslogs-region": "us-east-1",
                     "awslogs-stream-prefix": "ecs"
-                },
-                "secretOptions": []
+                }
             },
             "systemControls": []
         }
@@ -210,8 +200,8 @@
     "requiresCompatibilities": [
         "FARGATE"
     ],
-    "cpu": "8192",
-    "memory": "20480",
+    "cpu": "4096",
+    "memory": "8192",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
