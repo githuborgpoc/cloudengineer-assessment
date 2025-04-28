@@ -2,7 +2,7 @@
 
 # Use the latest Nginx image as the base
 FROM nginx:latest
-
+ENV TZ=America/New_York
 ENV HOSTNAME=nginx
 # Copy custom Nginx configuration files
 # COPY nginx.conf /etc/nginx/nginx.conf

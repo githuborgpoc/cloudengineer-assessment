@@ -20,6 +20,8 @@ ENV DATABASE_USER=fazt
 ENV DATABASE_PASSWORD=mypassword
 ENV DATABASE_NAME=linksdb
 ENV REDIS_HOST=redis
+ENV TZ=America/New_York
+
 
 # Run the app
 CMD ["sh", "-c", "rm -rf node_modules && npm install && npm run dev"]

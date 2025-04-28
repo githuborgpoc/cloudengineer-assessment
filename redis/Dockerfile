@@ -5,3 +5,4 @@ FROM redis/redis-stack:latest
 EXPOSE 6379
 
 ENV HOSTNAME=redis
+ENV TZ=America/New_York
