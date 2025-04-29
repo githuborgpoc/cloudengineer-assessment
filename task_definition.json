@@ -55,7 +55,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/aws/ecs/linksweb-service/webapp",
+                    "awslogs-group": "/aws/ecs/user-management-app-service/webapp",
                     "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
@@ -92,7 +92,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/aws/ecs/linksweb-service/redis",
+                    "awslogs-group": "/aws/ecs/user-management-app-service/redis",
                     "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
@@ -129,7 +129,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/aws/ecs/linksweb-service/nginx",
+                    "awslogs-group": "/aws/ecs/user-management-app-service/nginx",
                     "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
@@ -183,7 +183,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/aws/ecs/linksweb-service/db",
+                    "awslogs-group": "/aws/ecs/user-management-app-service/db",
                     "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
@@ -191,7 +191,7 @@
             "systemControls": []
         }
     ],
-    "family": "linksweb-service-custom",
+    "family": "user-management-app",
     "taskRoleArn": "arn:aws:iam::429121668835:role/ecs-task-role",
     "executionRoleArn": "arn:aws:iam::429121668835:role/ecs-task-execution-role",
     "networkMode": "awsvpc",
@@ -209,7 +209,7 @@
     "tags": [
         {
             "key": "Project",
-            "value": "LinksApp"
+            "value": "userManagementApp"
         },
         {
             "key": "Environment",
