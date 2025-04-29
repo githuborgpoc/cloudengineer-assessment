@@ -208,3 +208,4 @@ vpc_id      = aws_vpc.vpc.id
     Name = "ecs_security_group"
   }
 }
+ 
