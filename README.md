@@ -1,55 +1,129 @@
-# Notes App with Nodejs and Mysql
+📋 User Management App - Documentation
+============================================
 
-Notes App is a Multi Page Application using Nodejs and Mysql. The purpose of this web application is just to be an example for beginners.
+🌟 Overview
+-----------
 
-![](docs/screenshot2.png)
-![](docs/screenshot.png)
+A simple **Node.js Express** app that lets users:
 
-### Installation with Docker (Recommended)
+-   ➕ Add new user data (**name**, **email**) into a **MySQL** database.
+
+-   👀 View a list of users, with data **cached in Redis** for ⚡ 1 hour to boost performance.
+
+
+🚀 Main Features - Application
+------------------------------
+
+-   📝 **Add Users**
+
+    -   Form available at `/add-data-form` to submit user details into MySQL.
+
+-   📋 **List Users**
+
+    -   Endpoint `/users` lists all users.
+
+    -   First checks Redis cache.
+
+    -   If cache is empty ➡️ fetches from MySQL ➡️ caches the result in Redis (TTL: 1 hour).
+
+* * * * *
+
+🏗️ Architecture
+----------------
 
 ```
-git clone https://github.com/FaztTech/nodejs-mysql-links
-cd nodejs-mysql-links
-docker-compose up
+AWS VPC
+
+ └── ECS Cluster
+
+      └── ECS Service
+
+           └── ECS Task (Running 4 Containers)
+
+                ├── Node.js App (webapp)
+
+                ├── Redis (cache)
+
+                ├── MySQL (database)
+
+                └── Nginx (reverse proxy)
 ```
 
-Now you can visit http://localhost:4000
+🛠️ Tech Stack
+--------------
 
-### Manual Installation
+| Layer | Technology |
+| --- | --- |
+| **Backend** | Node.js (Express) |
+| **Database** | MySQL |
+| **Cache** | Redis |
+| **Web Server** | Nginx |
+| **Infrastructure** | Terraform |
 
-```
-mysql -u MYUSR "-pMYPASSWORD" < ./database/db.sql # create database
-npm i
-npm run build
-npm start
-```
+* * * * *
 
-## File Structure
+⚙️ CI/CD Pipeline
+-----------------
 
-- database, it the folder with all the sql queries, you can use to recreate the database for this application
-- src, it's all the code for the Backend and Frontend Application
-- docs
+GitHub Actions workflows are defined under `.github/workflows/`:
 
-## Environment Variables
+-   📦 `build.yml`
 
-- PORT
+-   🚀 `deploy.yml`
 
-## Old Versions of this Project
+### 🔑 Pre-requisites
 
-- [version-2018](https://github.com/FaztTech/nodejs-mysql-links/tree/version-2018)
+-   Set the following secrets in GitHub repository:
 
-## Todo
+    -   `AWS_ACCESS_KEY_ID`
 
-1. [ ] Add docker compose production build
-1. [ ] Add nodemailer for transactional emails
+    -   `AWS_SECRET_ACCESS_KEY`
 
-## Tools
+    -   `AWS_ACCOUNT_ID`
 
-- Nodejs
-- Mysql
-- Babel
-- Docker
+-   Configure AWS Region inside each pipeline YAML file.
 
-# Resources
+-   Provision infrastructure (VPC, ECS, etc.) via **Terraform** before running deployments.
 
-- https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server
+### 🛠️ build.yml --- Build & Push
+
+-   Triggered by:
+
+    -   📥 Manual (`workflow_dispatch`)
+
+    -   🔄 Automatic Pushes to `main` or `prod` branches.
+
+-   Actions:
+
+    -   Sets up AWS CLI and authenticates to Amazon ECR.
+
+    -   Builds Docker images for **webapp**, **redis**, **nginx**, and **mysql**.
+
+    -   Tags and pushes images to ECR (`image_tag` or Git commit SHA).
+
+    -   Prints the pushed image URIs for verification.
+
+### 🚀 deploy.yml --- Deploy to ECS
+
+-   Triggered manually with an `image_tag` input (Available at the end of Build Pipeline).
+
+-   Actions:
+
+    -   Sets up AWS CLI credentials.
+
+    -   Updates ECS Task Definition JSON with new image tags via `jq`.
+
+    -   Registers the updated task definition and retrieves its ARN.
+
+    -   Updates the ECS service to use the new task definition → completes deployment.
+
+* * * * *
+
+📢 Notes
+--------
+
+-   Redis caching is set for **1 hour** (3600 seconds).
+
+-   Infrastructure must be deployed before first run.
+
+-   ECR repos must exist prior to image push.

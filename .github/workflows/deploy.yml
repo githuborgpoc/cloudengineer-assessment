@@ -11,9 +11,9 @@ env:
   AWS_REGION: "us-east-2"
   IMAGE_TAG: ${{ github.event.inputs.image_tag || github.sha }}  # This ensures a fallback
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  ECS_CLUSTER_NAME: "linksapp-cluster"
-  ECS_SERVICE_NAME: "linksweb-service"
-  ECS_TASK_DEFINITION: "linksweb-service"  # The name of your ECS Task Definition
+  ECS_CLUSTER_NAME: "user-management-app-cluster"
+  ECS_SERVICE_NAME: "user-management-service"
+  ECS_TASK_DEFINITION: "user-management-service"  # The name of your ECS Task Definition
   ECR_REPO_WEBAPP: "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/webapp"
   ECR_REPO_REDIS: "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/redis"
   ECR_REPO_NGINX: "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/nginx"
