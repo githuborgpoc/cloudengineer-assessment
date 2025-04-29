@@ -55,7 +55,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/aws/ecs/user-management-app-cluster/webapp",
+                    "awslogs-group": "/aws/ecs/user-management-app-cluster",
                     "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
@@ -92,7 +92,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/aws/ecs/user-management-app-cluster/redis",
+                    "awslogs-group": "/aws/ecs/user-management-app-cluster",
                     "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
@@ -129,7 +129,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/aws/ecs/user-management-app-cluster/nginx",
+                    "awslogs-group": "/aws/ecs/user-management-app-cluster",
                     "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
@@ -183,7 +183,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/aws/ecs/user-management-app-cluster/db",
+                    "awslogs-group": "/aws/ecs/user-management-app-cluster",
                     "awslogs-region": "us-east-2",
                     "awslogs-stream-prefix": "ecs"
                 }
