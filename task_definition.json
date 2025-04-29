@@ -191,7 +191,7 @@
             "systemControls": []
         }
     ],
-    "family": "luser-management-app",
+    "family": "user-management-app",
     "taskRoleArn": "arn:aws:iam::429121668835:role/ecs-task-role",
     "executionRoleArn": "arn:aws:iam::429121668835:role/ecs-task-execution-role",
     "networkMode": "awsvpc",
