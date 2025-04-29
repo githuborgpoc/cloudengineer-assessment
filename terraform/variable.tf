@@ -25,7 +25,7 @@ variable "ecs_cluster_name" {
 
 variable "cloudwatch_log_group" {
   description = "CloudWatch Log Group for ECS Exec"
-  default     = "/aws/ecs/user-management-app-cluster"
+  default     = "/aws/ecs/user-management-app-service"
 }
 
 variable "webapp_image" {
