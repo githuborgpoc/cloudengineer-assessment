@@ -41,7 +41,7 @@ module "ecs" {
   }
 
   services = {
-    linksweb-service = {
+    user-management-service = {
       cpu    = 4096
       memory = 8192
       assign_public_ip = true
