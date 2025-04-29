@@ -20,12 +20,12 @@ variable "subnet_az" {
 
 variable "ecs_cluster_name" {
   description = "Name of ECS Cluster"
-  default     = "linksapp-cluster"
+  default     = "user-management-app-cluster"
 }
 
 variable "cloudwatch_log_group" {
   description = "CloudWatch Log Group for ECS Exec"
-  default     = "/aws/ecs/linksapp-cluster"
+  default     = "/aws/ecs/user-management-app-cluster"
 }
 
 variable "webapp_image" {
@@ -40,7 +40,7 @@ variable "environment" {
 
 variable "project_name" {
   description = "Name of the project"
-  default     = "LinksApp"
+  default     = "userManagementApp"
 }
 
 variable "repository_names" {
