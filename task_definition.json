@@ -191,7 +191,7 @@
             "systemControls": []
         }
     ],
-    "family": "user-management-app",
+    "family": "user-management-service",
     "taskRoleArn": "arn:aws:iam::429121668835:role/ecs-task-role",
     "executionRoleArn": "arn:aws:iam::429121668835:role/ecs-task-execution-role",
     "networkMode": "awsvpc",
